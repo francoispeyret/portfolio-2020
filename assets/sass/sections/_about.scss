@@ -1,0 +1,38 @@
+#about {
+    max-width: 340px;
+    margin-left: 20vw;
+
+    h2 {
+        font-size: 3.6rem;
+        position: relative;
+
+        .face {
+            fill: white;
+            width: 48px;
+            height: 48px;
+            display: block;
+            position: absolute;
+            left: -64px;
+            top: 8px;
+        }
+    }
+
+    p {
+        text-transform: uppercase;
+        font-size: 2.8rem;
+        line-height: 1;
+    }
+
+    .tags {
+        svg {
+            fill: #fff;
+            opacity: 0.3;
+            transition: $easing;
+
+            &:hover {
+                opacity: 1;
+            }
+
+        }
+    }
+}

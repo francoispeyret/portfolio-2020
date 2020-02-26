@@ -1,0 +1,14 @@
+
+@import "variables";
+@import "fonts";
+
+@import "partials/utilities";
+// LAYOUT
+@import "partials/layout";
+@import "partials/header";
+@import "partials/footer";
+
+// SECTIONS
+@import "sections/home";
+@import "sections/about";
+@import "sections/skills";

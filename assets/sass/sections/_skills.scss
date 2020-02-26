@@ -1,0 +1,91 @@
+#skills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .content {
+        display: block;
+    }
+
+    h2 {
+        font-size: 2.4rem;
+    }
+
+    p {
+        text-transform: uppercase;
+        font-size: 0.66rem;
+    }
+
+    ul {
+        margin-top: 2rem;
+        list-style: none;
+
+        &:hover {
+            li {
+                opacity: 0.66;
+            }
+        }
+
+        li {
+            position: relative;
+            display: inline-block;
+            transition: $easing;
+            padding: 0.85rem 1.5rem;
+            font-weight: 800;
+
+            img {
+                //background-color: #1115;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                display: block;
+                max-width: 128px;
+                margin-bottom: 0.5rem;
+                margin-left: auto;
+                margin-right: auto;
+                filter: grayscale(1) drop-shadow(0 10px 10px rgba(#000,0.3));
+                transition: $easing;
+            }
+
+            strong {
+                transition: $easing;
+                display: block;
+                font-size: 0.75rem;
+                @media (min-width: 769px) {
+                    opacity: 0;
+                    position: absolute;z-index: 5;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-25px);
+                    border-radius: 0.25rem;
+                    padding: 0.15rem 0.5rem;
+                    white-space: nowrap;
+                    background-color: #0006;
+
+                    &::before {
+                        content:"";
+                        display: block;
+                        border: 5px solid transparent;
+                        border-bottom-color: #0006;
+                        position: absolute;
+                        left: calc(50% - 2.5px);
+                        top: -10px;
+                    }
+                }
+            }
+
+            @media (min-width: 769px) {
+                &:hover {
+                    opacity: 1;
+                    z-index: 5;
+                    img {
+                        filter: grayscale(0);
+                    }
+                    strong {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(-10px);
+                    }
+                }
+            }
+        }
+    }
+}

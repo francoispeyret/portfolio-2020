@@ -1,0 +1,51 @@
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Proxima', arial, sans-serif;
+    -webkit-font-smoothing: antialiased; /* Chrome, Safari */
+    -moz-osx-font-smoothing: grayscale; /* Firefox */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::-moz-selection { background: #0009; }
+::selection { background: #0009; }
+
+body {
+    color: white;
+    background-color: #2d325a;
+    animation: backgroundAnimation ease-in-out 15s infinite;
+
+    @keyframes backgroundAnimation {
+        0%, 100% {
+            background-color: #2d325a;
+        }
+        33% {
+            background-color: #2d5a3e;
+        }
+        66% {
+            background-color: #5a2d3e;
+        }
+    }
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(#000,0.3);
+        -webkit-box-shadow: inset 0 0 6px rgba(#000,0.3);
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #fff;
+      outline: 1px solid slategrey;
+    }
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
