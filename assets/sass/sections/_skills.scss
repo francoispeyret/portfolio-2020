@@ -45,6 +45,9 @@
                 margin-right: auto;
                 filter: grayscale(1) drop-shadow(0 10px 10px rgba(#000,0.3));
                 transition: $easing;
+                @media (max-width: 769px) {
+                    max-width: 92px;
+                }
             }
 
             strong {

@@ -1,10 +1,17 @@
 #about {
     max-width: 340px;
     margin-left: 20vw;
+    @media (max-width: 769px) {
+        margin-left: 10vw;
+        max-width: 260px;
+    }
 
     h2 {
         font-size: 3.6rem;
         position: relative;
+        @media (max-width: 769px) {
+            font-size: 2.2rem;
+        }
 
         .face {
             fill: white;
@@ -14,6 +21,12 @@
             position: absolute;
             left: -64px;
             top: 8px;
+            @media (max-width: 769px) {
+                height: 32px;
+                width: 32px;
+                top: 4px;
+                left: -48px;
+            }
         }
     }
 
@@ -21,6 +34,9 @@
         text-transform: uppercase;
         font-size: 2.8rem;
         line-height: 1;
+        @media (max-width: 769px) {
+            font-size: 1.8rem;
+        }
     }
 
     .tags {

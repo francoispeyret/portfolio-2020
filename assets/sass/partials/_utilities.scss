@@ -12,6 +12,13 @@ html {
     scroll-behavior: smooth;
 }
 
+@media (max-width: 769px) {
+    html, body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+}
+
 ::-moz-selection { background: #0009; }
 ::selection { background: #0009; }
 

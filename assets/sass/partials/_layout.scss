@@ -50,6 +50,10 @@ main {
         margin-top: calc(3rem + 100px);
         h1 {
             font-size: 3.6rem;
+            @media (max-width: 769px) {
+                font-size: 2.2rem;
+            }
+
         }
         svg {
             display: inline-block;
@@ -58,6 +62,10 @@ main {
             width: 48px;
             position: relative;
             top: 0.25rem;
+            @media (max-width: 769px) {
+                height: 32px;
+                width: 32px;
+            }
         }
 
         .seat {

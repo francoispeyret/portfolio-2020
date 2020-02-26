@@ -25,17 +25,24 @@ html {
   scroll-behavior: smooth;
 }
 
-/* line 15, ../sass/partials/_utilities.scss */
+@media (max-width: 769px) {
+  /* line 16, ../sass/partials/_utilities.scss */
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+/* line 22, ../sass/partials/_utilities.scss */
 ::-moz-selection {
   background: #0009;
 }
 
-/* line 16, ../sass/partials/_utilities.scss */
+/* line 23, ../sass/partials/_utilities.scss */
 ::selection {
   background: #0009;
 }
 
-/* line 18, ../sass/partials/_utilities.scss */
+/* line 25, ../sass/partials/_utilities.scss */
 body {
   color: white;
   background-color: #2d325a;
@@ -52,22 +59,22 @@ body {
     background-color: #5a2d3e;
   }
 }
-/* line 35, ../sass/partials/_utilities.scss */
+/* line 42, ../sass/partials/_utilities.scss */
 body::-webkit-scrollbar {
   width: 4px;
 }
-/* line 38, ../sass/partials/_utilities.scss */
+/* line 45, ../sass/partials/_utilities.scss */
 body::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
-/* line 42, ../sass/partials/_utilities.scss */
+/* line 49, ../sass/partials/_utilities.scss */
 body::-webkit-scrollbar-thumb {
   background-color: #fff;
   outline: 1px solid slategrey;
 }
 
-/* line 48, ../sass/partials/_utilities.scss */
+/* line 55, ../sass/partials/_utilities.scss */
 a {
   color: white;
   text-decoration: none;
@@ -136,7 +143,13 @@ main .heading {
 main .heading h1 {
   font-size: 3.6rem;
 }
-/* line 54, ../sass/partials/_layout.scss */
+@media (max-width: 769px) {
+  /* line 51, ../sass/partials/_layout.scss */
+  main .heading h1 {
+    font-size: 2.2rem;
+  }
+}
+/* line 58, ../sass/partials/_layout.scss */
 main .heading svg {
   display: inline-block;
   fill: #fff;
@@ -145,11 +158,18 @@ main .heading svg {
   position: relative;
   top: 0.25rem;
 }
-/* line 63, ../sass/partials/_layout.scss */
+@media (max-width: 769px) {
+  /* line 58, ../sass/partials/_layout.scss */
+  main .heading svg {
+    height: 32px;
+    width: 32px;
+  }
+}
+/* line 71, ../sass/partials/_layout.scss */
 main .heading .seat {
   transform: scaleX(-1) translateX(-0.5rem);
 }
-/* line 68, ../sass/partials/_layout.scss */
+/* line 76, ../sass/partials/_layout.scss */
 main section {
   min-height: calc(100vh - 100px);
   padding-top: 100px;
@@ -386,6 +406,187 @@ footer .back-to-top a:hover svg {
   transform: translateY(-10px);
 }
 
+/* line 1, ../sass/sections/_about.scss */
+#about {
+  max-width: 340px;
+  margin-left: 20vw;
+}
+@media (max-width: 769px) {
+  /* line 1, ../sass/sections/_about.scss */
+  #about {
+    margin-left: 10vw;
+    max-width: 260px;
+  }
+}
+/* line 9, ../sass/sections/_about.scss */
+#about h2 {
+  font-size: 3.6rem;
+  position: relative;
+}
+@media (max-width: 769px) {
+  /* line 9, ../sass/sections/_about.scss */
+  #about h2 {
+    font-size: 2.2rem;
+  }
+}
+/* line 16, ../sass/sections/_about.scss */
+#about h2 .face {
+  fill: white;
+  width: 48px;
+  height: 48px;
+  display: block;
+  position: absolute;
+  left: -64px;
+  top: 8px;
+}
+@media (max-width: 769px) {
+  /* line 16, ../sass/sections/_about.scss */
+  #about h2 .face {
+    height: 32px;
+    width: 32px;
+    top: 4px;
+    left: -48px;
+  }
+}
+/* line 33, ../sass/sections/_about.scss */
+#about p {
+  text-transform: uppercase;
+  font-size: 2.8rem;
+  line-height: 1;
+}
+@media (max-width: 769px) {
+  /* line 33, ../sass/sections/_about.scss */
+  #about p {
+    font-size: 1.8rem;
+  }
+}
+/* line 43, ../sass/sections/_about.scss */
+#about .tags svg {
+  fill: #fff;
+  opacity: 0.3;
+  transition: ease 0.2s all;
+}
+/* line 48, ../sass/sections/_about.scss */
+#about .tags svg:hover {
+  opacity: 1;
+}
+
+/* line 1, ../sass/sections/_contact.scss */
+#contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 360px;
+  margin-left: 50vw;
+}
+@media (max-width: 769px) {
+  /* line 1, ../sass/sections/_contact.scss */
+  #contact {
+    margin-left: 10vw;
+    max-width: 260px;
+  }
+}
+/* line 12, ../sass/sections/_contact.scss */
+#contact h2 {
+  margin-bottom: 1rem;
+  font-size: 3.6rem;
+  position: relative;
+}
+@media (max-width: 769px) {
+  /* line 12, ../sass/sections/_contact.scss */
+  #contact h2 {
+    font-size: 2.2rem;
+  }
+}
+/* line 20, ../sass/sections/_contact.scss */
+#contact h2 .send {
+  fill: white;
+  width: 48px;
+  height: 48px;
+  display: block;
+  position: absolute;
+  left: -64px;
+  top: 8px;
+}
+@media (max-width: 769px) {
+  /* line 20, ../sass/sections/_contact.scss */
+  #contact h2 .send {
+    height: 32px;
+    width: 32px;
+    top: 4px;
+    left: -48px;
+  }
+}
+/* line 37, ../sass/sections/_contact.scss */
+#contact p {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+@media (max-width: 769px) {
+  /* line 37, ../sass/sections/_contact.scss */
+  #contact p {
+    font-size: 1.8rem;
+  }
+}
+/* line 46, ../sass/sections/_contact.scss */
+#contact form {
+  display: flex;
+  flex-wrap: wrap;
+}
+/* line 49, ../sass/sections/_contact.scss */
+#contact form p {
+  flex: 0 0 100%;
+  max-width: 100%;
+  display: block;
+}
+/* line 53, ../sass/sections/_contact.scss */
+#contact form p label, #contact form p input, #contact form p textarea {
+  display: block;
+  width: 100%;
+}
+/* line 59, ../sass/sections/_contact.scss */
+#contact form label {
+  margin-bottom: 0.33rem;
+}
+/* line 63, ../sass/sections/_contact.scss */
+#contact form input, #contact form textarea {
+  letter-spacing: 0.1em;
+}
+/* line 67, ../sass/sections/_contact.scss */
+#contact form input, #contact form textarea, #contact form button {
+  background: none;
+  color: #fff;
+  outline: none;
+  border: 2px solid #fff3;
+  padding: 0.5rem 0.5rem;
+  margin-bottom: 1rem;
+  transition: border ease 0.25s, color ease 0.25s;
+}
+/* line 76, ../sass/sections/_contact.scss */
+#contact form input::placeholder, #contact form textarea::placeholder, #contact form button::placeholder {
+  color: #fff3;
+}
+/* line 80, ../sass/sections/_contact.scss */
+#contact form input:active, #contact form input:focus, #contact form input:hover, #contact form textarea:active, #contact form textarea:focus, #contact form textarea:hover, #contact form button:active, #contact form button:focus, #contact form button:hover {
+  border-color: #fff;
+}
+/* line 87, ../sass/sections/_contact.scss */
+#contact form button {
+  text-transform: uppercase;
+  font-weight: 800;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.45rem;
+  transition: all 0.25s cubic-bezier(0.71, -0.29, 0.63, 2.11);
+}
+/* line 95, ../sass/sections/_contact.scss */
+#contact form button:focus, #contact form button:active, #contact form button:hover {
+  background: #fff;
+  color: #000;
+  letter-spacing: 0.396em;
+  cursor: pointer;
+}
+
 /* line 2, ../sass/sections/_home.scss */
 #home .content {
   transition: ease-in all 0.5s;
@@ -427,43 +628,6 @@ footer .back-to-top a:hover svg {
   color: #000;
   letter-spacing: 0.396em;
   cursor: pointer;
-}
-
-/* line 1, ../sass/sections/_about.scss */
-#about {
-  max-width: 340px;
-  margin-left: 20vw;
-}
-/* line 5, ../sass/sections/_about.scss */
-#about h2 {
-  font-size: 3.6rem;
-  position: relative;
-}
-/* line 9, ../sass/sections/_about.scss */
-#about h2 .face {
-  fill: white;
-  width: 48px;
-  height: 48px;
-  display: block;
-  position: absolute;
-  left: -64px;
-  top: 8px;
-}
-/* line 20, ../sass/sections/_about.scss */
-#about p {
-  text-transform: uppercase;
-  font-size: 2.8rem;
-  line-height: 1;
-}
-/* line 27, ../sass/sections/_about.scss */
-#about .tags svg {
-  fill: #fff;
-  opacity: 0.3;
-  transition: ease 0.2s all;
-}
-/* line 32, ../sass/sections/_about.scss */
-#about .tags svg:hover {
-  opacity: 1;
 }
 
 /* line 1, ../sass/sections/_skills.scss */
@@ -515,14 +679,20 @@ footer .back-to-top a:hover svg {
   filter: grayscale(1) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.3));
   transition: ease 0.2s all;
 }
-/* line 50, ../sass/sections/_skills.scss */
+@media (max-width: 769px) {
+  /* line 37, ../sass/sections/_skills.scss */
+  #skills ul li img {
+    max-width: 92px;
+  }
+}
+/* line 53, ../sass/sections/_skills.scss */
 #skills ul li strong {
   transition: ease 0.2s all;
   display: block;
   font-size: 0.75rem;
 }
 @media (min-width: 769px) {
-  /* line 50, ../sass/sections/_skills.scss */
+  /* line 53, ../sass/sections/_skills.scss */
   #skills ul li strong {
     opacity: 0;
     position: absolute;
@@ -534,7 +704,7 @@ footer .back-to-top a:hover svg {
     white-space: nowrap;
     background-color: #0006;
   }
-  /* line 64, ../sass/sections/_skills.scss */
+  /* line 67, ../sass/sections/_skills.scss */
   #skills ul li strong::before {
     content: "";
     display: block;
@@ -546,16 +716,16 @@ footer .back-to-top a:hover svg {
   }
 }
 @media (min-width: 769px) {
-  /* line 77, ../sass/sections/_skills.scss */
+  /* line 80, ../sass/sections/_skills.scss */
   #skills ul li:hover {
     opacity: 1;
     z-index: 5;
   }
-  /* line 80, ../sass/sections/_skills.scss */
+  /* line 83, ../sass/sections/_skills.scss */
   #skills ul li:hover img {
     filter: grayscale(0);
   }
-  /* line 83, ../sass/sections/_skills.scss */
+  /* line 86, ../sass/sections/_skills.scss */
   #skills ul li:hover strong {
     opacity: 1;
     transform: translateX(-50%) translateY(-10px);

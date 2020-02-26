@@ -48,6 +48,14 @@ function mobileMenu() {
 
 
 //----------------------------//
+//        CONTACT FORM        //
+//----------------------------//
+
+
+
+
+
+//----------------------------//
 //        GAME OVERLAY        //
 //----------------------------//
 let cursor,
@@ -55,7 +63,7 @@ let cursor,
     bullets = [],
     asteroids = [],
     startingAnimation = 90,
-    gameStarted = false;
+    gameStarted = true;
 
 const buttonStart = document.querySelector('#play-start');
 
@@ -97,9 +105,10 @@ function setup() {
 
         asteroids[a] = {
             pos: createVector(random(0, width), random(0, height)),
+            vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
             w: randShape,
             angle: random(0, TWO_PI),
-            vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75))
+            angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
         };
     }
 
@@ -216,6 +225,7 @@ function draw() {
 
     // ASTEROIDS
     for(let a = 0; a < asteroids.length; a++) {
+        asteroids[a].angle += asteroids[a].angleVel;
         push();
             translate(asteroids[a].pos.x, asteroids[a].pos.y);
             rotate(asteroids[a].angle);
@@ -227,12 +237,13 @@ function draw() {
         objectNoLimit(asteroids[a]);
     }
 
-    if(frameCount % 240 == 0 && asteroids.length < 30) {
+    if(frameCount % 240 == 0 && asteroids.length < 22) {
         let asteroidNewOne = {
             pos: createVector(random(0, width), random(0, height)),
+            vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
             w: 100,
             angle: random(0, TWO_PI),
-            vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75))
+            angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
         };
         asteroids.push(asteroidNewOne);
     }
@@ -280,12 +291,14 @@ function asteroidSubdivise(asteroidBefore) {
         pos: createVector(asteroidBefore.pos.x, asteroidBefore.pos.y),
         w: randShape,
         angle: random(0, TWO_PI),
-        vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75))
+        vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
+        angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
     }, asteroidTwo = {
         pos: createVector(asteroidBefore.pos.x, asteroidBefore.pos.y),
         w: randShape,
         angle: random(0, TWO_PI),
-        vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75))
+        vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
+        angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
     };
 
     asteroids.push(asteroidOne);

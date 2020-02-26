@@ -1,0 +1,106 @@
+#contact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 360px;
+    margin-left: 50vw;
+    @media (max-width: 769px) {
+        margin-left: 10vw;
+        max-width: 260px;
+    }
+
+    h2 {
+        margin-bottom: 1rem;
+        font-size: 3.6rem;
+        position: relative;
+        @media (max-width: 769px) {
+            font-size: 2.2rem;
+        }
+
+        .send {
+            fill: white;
+            width: 48px;
+            height: 48px;
+            display: block;
+            position: absolute;
+            left: -64px;
+            top: 8px;
+            @media (max-width: 769px) {
+                height: 32px;
+                width: 32px;
+                top: 4px;
+                left: -48px;
+            }
+        }
+    }
+
+    p {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        line-height: 1;
+        @media (max-width: 769px) {
+            font-size: 1.8rem;
+        }
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        p {
+            flex: 0 0 100%;
+            max-width: 100%;
+            display: block;
+            label,input,textarea {
+                display: block;
+                width: 100%;
+            }
+        }
+
+        label {
+            margin-bottom: 0.33rem;
+        }
+
+        input,textarea {
+            letter-spacing: 0.1em;
+        }
+
+        input,textarea,button {
+            background: none;
+            color: #fff;
+            outline: none;
+            border: 2px solid #fff3;
+            padding: 0.5rem 0.5rem;
+            margin-bottom: 1rem;
+            transition: border ease 0.25s, color ease 0.25s;
+
+            &::placeholder {
+                color: #fff3;
+            }
+
+            &:active,
+            &:focus,
+            &:hover {
+                border-color: #fff;
+            }
+        }
+
+        button {
+            text-transform: uppercase;
+            font-weight: 800;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.45rem;
+
+            transition: all 0.25s cubic-bezier(0.71,-0.29, 0.63, 2.11);
+
+            &:focus,
+            &:active,
+            &:hover {
+                background: #fff;
+                color: #000;
+                letter-spacing: 0.396em;
+                cursor: pointer;
+            }
+        }
+    }
+
+}
