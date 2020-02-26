@@ -12,6 +12,9 @@ footer {
         bottom: 1.5rem;
         height: 90px;
         border-right: 2px solid #fff;
+        @media (max-width: 769px) {
+            display: none;
+        }
     }
 
     &::after {
@@ -28,8 +31,16 @@ footer {
     }
 
     .col {
-        flex: 1 0 33.33%;
+        flex: 0 0 33.33%;
         max-width: 33.333%;
+
+        @media (max-width: 769px) {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
     }
 
     ul {
@@ -38,6 +49,13 @@ footer {
             display: inline-block;
             margin-right: 2rem;
             letter-spacing: 0.2em;
+            @media (max-width: 769px) {
+                margin: 0 .5rem;
+                a {
+                    padding: 0.5rem;
+                    display: block;
+                }
+            }
         }
     }
 
@@ -45,6 +63,9 @@ footer {
         font-size: 2.4rem;
         line-height: 1;
         max-width: 240px;
+        @media (max-width: 769px) {
+            margin: 0 auto;
+        }
     }
 
     .copyrights {
@@ -52,6 +73,9 @@ footer {
         font-size: 0.75rem;
         font-weight: 800;
         text-transform: uppercase;
+        @media (max-width: 769px) {
+            text-align: center;
+        }
     }
 
     .back-to-top {

@@ -84,8 +84,21 @@ header {
 main {
   padding-top: 0;
 }
+@media (max-width: 769px) {
+  /* line 7, ../sass/partials/_layout.scss */
+  main {
+    opacity: 1;
+    filter: none;
+    transition: ease-in-out 0.2s all;
+  }
+  /* line 14, ../sass/partials/_layout.scss */
+  main.menu-active {
+    opacity: 0.15;
+    filter: blur(5px);
+  }
+}
 
-/* line 11, ../sass/partials/_layout.scss */
+/* line 21, ../sass/partials/_layout.scss */
 header {
   position: fixed;
   z-index: 99;
@@ -93,7 +106,7 @@ header {
   right: 0;
   left: 0;
 }
-/* line 17, ../sass/partials/_layout.scss */
+/* line 27, ../sass/partials/_layout.scss */
 header::after {
   content: "";
   display: block;
@@ -108,35 +121,35 @@ header::after {
   animation: backgroundAnimation ease-in-out 15s infinite;
   filter: blur(12px);
 }
-/* line 31, ../sass/partials/_layout.scss */
+/* line 41, ../sass/partials/_layout.scss */
 header > * {
   position: relative;
   z-index: 1;
 }
 
-/* line 38, ../sass/partials/_layout.scss */
+/* line 48, ../sass/partials/_layout.scss */
 main .heading {
   text-align: center;
   margin-top: calc(3rem + 100px);
 }
-/* line 41, ../sass/partials/_layout.scss */
+/* line 51, ../sass/partials/_layout.scss */
 main .heading h1 {
-  font-size: 2.4rem;
+  font-size: 3.6rem;
 }
-/* line 44, ../sass/partials/_layout.scss */
+/* line 54, ../sass/partials/_layout.scss */
 main .heading svg {
   display: inline-block;
   fill: #fff;
-  height: 32px;
-  width: 32px;
+  height: 48px;
+  width: 48px;
   position: relative;
   top: 0.25rem;
 }
-/* line 53, ../sass/partials/_layout.scss */
+/* line 63, ../sass/partials/_layout.scss */
 main .heading .seat {
   transform: scaleX(-1) translateX(-0.5rem);
 }
-/* line 58, ../sass/partials/_layout.scss */
+/* line 68, ../sass/partials/_layout.scss */
 main section {
   min-height: calc(100vh - 100px);
   padding-top: 100px;
@@ -213,6 +226,44 @@ header .header-menu li a {
   display: block;
   padding: 0.95rem 0.5rem;
 }
+/* line 66, ../sass/partials/_header.scss */
+header .header-menu #toggle-mobile {
+  display: none;
+}
+@media (max-width: 769px) {
+  /* line 72, ../sass/partials/_header.scss */
+  header .header-menu.active ul {
+    right: 0;
+  }
+  /* line 77, ../sass/partials/_header.scss */
+  header .header-menu #toggle-mobile {
+    display: block;
+    padding: 0.5rem 1rem;
+    border-right: 2px solid #fff;
+    cursor: pointer;
+  }
+  /* line 82, ../sass/partials/_header.scss */
+  header .header-menu #toggle-mobile svg {
+    display: block;
+    height: 32px;
+    width: 32px;
+    fill: #fff;
+  }
+  /* line 89, ../sass/partials/_header.scss */
+  header .header-menu ul {
+    transition: cubic-bezier(0.71, -0.29, 0.63, 2.11) all 0.5s;
+    position: absolute;
+    top: 4rem;
+    right: -100%;
+    height: auto;
+  }
+  /* line 96, ../sass/partials/_header.scss */
+  header .header-menu li {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+}
 
 /* line 1, ../sass/partials/_footer.scss */
 footer {
@@ -230,54 +281,93 @@ footer::before, footer::after {
   height: 90px;
   border-right: 2px solid #fff;
 }
-/* line 17, ../sass/partials/_footer.scss */
+@media (max-width: 769px) {
+  /* line 6, ../sass/partials/_footer.scss */
+  footer::before, footer::after {
+    display: none;
+  }
+}
+/* line 20, ../sass/partials/_footer.scss */
 footer::after {
   left: auto;
   right: 1.5rem;
   height: 150px;
 }
-/* line 23, ../sass/partials/_footer.scss */
+/* line 26, ../sass/partials/_footer.scss */
 footer .row {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   padding: 0 1.5rem;
 }
-/* line 30, ../sass/partials/_footer.scss */
+/* line 33, ../sass/partials/_footer.scss */
 footer .col {
-  flex: 1 0 33.33%;
+  flex: 0 0 33.33%;
   max-width: 33.333%;
 }
-/* line 35, ../sass/partials/_footer.scss */
+@media (max-width: 769px) {
+  /* line 33, ../sass/partials/_footer.scss */
+  footer .col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+}
+/* line 46, ../sass/partials/_footer.scss */
 footer ul {
   list-style: none;
 }
-/* line 37, ../sass/partials/_footer.scss */
+/* line 48, ../sass/partials/_footer.scss */
 footer ul li {
   display: inline-block;
   margin-right: 2rem;
   letter-spacing: 0.2em;
 }
-/* line 44, ../sass/partials/_footer.scss */
+@media (max-width: 769px) {
+  /* line 48, ../sass/partials/_footer.scss */
+  footer ul li {
+    margin: 0 .5rem;
+  }
+  /* line 54, ../sass/partials/_footer.scss */
+  footer ul li a {
+    padding: 0.5rem;
+    display: block;
+  }
+}
+/* line 62, ../sass/partials/_footer.scss */
 footer .bravo {
   font-size: 2.4rem;
   line-height: 1;
   max-width: 240px;
 }
-/* line 50, ../sass/partials/_footer.scss */
+@media (max-width: 769px) {
+  /* line 62, ../sass/partials/_footer.scss */
+  footer .bravo {
+    margin: 0 auto;
+  }
+}
+/* line 71, ../sass/partials/_footer.scss */
 footer .copyrights {
   text-align: right;
   font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
 }
-/* line 57, ../sass/partials/_footer.scss */
+@media (max-width: 769px) {
+  /* line 71, ../sass/partials/_footer.scss */
+  footer .copyrights {
+    text-align: center;
+  }
+}
+/* line 81, ../sass/partials/_footer.scss */
 footer .back-to-top {
   position: absolute;
   right: 0.8rem;
   bottom: calc(3rem + 150px - 20px);
 }
-/* line 62, ../sass/partials/_footer.scss */
+/* line 86, ../sass/partials/_footer.scss */
 footer .back-to-top svg {
   display: block;
   width: 24px;
@@ -285,22 +375,28 @@ footer .back-to-top svg {
   fill: #fff;
   transition: ease 0.2s all;
 }
-/* line 70, ../sass/partials/_footer.scss */
+/* line 94, ../sass/partials/_footer.scss */
 footer .back-to-top a {
   padding: 0.75rem;
   margin: -0.75rem;
   display: block;
 }
-/* line 76, ../sass/partials/_footer.scss */
+/* line 100, ../sass/partials/_footer.scss */
 footer .back-to-top a:hover svg {
   transform: translateY(-10px);
 }
 
-/* line 1, ../sass/sections/_home.scss */
-#home {
+/* line 2, ../sass/sections/_home.scss */
+#home .content {
+  transition: ease-in all 0.5s;
+}
+/* line 8, ../sass/sections/_home.scss */
+#home.started .content {
+  transform: translateY(-100%);
+  opacity: 0;
   pointer-events: none;
 }
-/* line 3, ../sass/sections/_home.scss */
+/* line 15, ../sass/sections/_home.scss */
 #home #p5-holder {
   position: fixed;
   z-index: 100;
@@ -309,6 +405,28 @@ footer .back-to-top a:hover svg {
   right: 0;
   top: 0;
   bottom: 0;
+}
+/* line 25, ../sass/sections/_home.scss */
+#home #play-start {
+  margin: 3rem auto;
+  display: block;
+  text-transform: uppercase;
+  font-size: 2.4rem;
+  font-weight: 800;
+  padding: 0.75rem 2.5rem 0.7rem;
+  color: #fff;
+  background: none;
+  border: 3px solid #fff;
+  appearance: none;
+  outline: none;
+  transition: all 0.25s cubic-bezier(0.71, -0.29, 0.63, 2.11);
+}
+/* line 40, ../sass/sections/_home.scss */
+#home #play-start:focus, #home #play-start:active, #home #play-start:hover {
+  background: #fff;
+  color: #000;
+  letter-spacing: 0.396em;
+  cursor: pointer;
 }
 
 /* line 1, ../sass/sections/_about.scss */

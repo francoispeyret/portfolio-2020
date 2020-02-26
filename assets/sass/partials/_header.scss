@@ -62,5 +62,42 @@ header {
                 padding: 0.95rem 0.5rem;
             }
         }
+
+        #toggle-mobile {
+            display: none;
+        }
+        @media (max-width: 769px) {
+
+            &.active {
+                ul {
+                    right: 0;
+                }
+            }
+
+            #toggle-mobile {
+                display: block;
+                padding: 0.5rem 1rem;
+                border-right: 2px solid #fff;
+                cursor: pointer;
+                svg {
+                    display: block;
+                    height: 32px;
+                    width: 32px;
+                    fill: #fff;
+                }
+            }
+            ul {
+                transition: cubic-bezier(0.71,-0.29, 0.63, 2.11) all 0.5s;
+                position: absolute;
+                top: 4rem;
+                right: -100%;
+                height: auto;
+            }
+            li {
+                display: block;
+                font-size: 1.6rem;
+                font-weight: 800;
+            }
+        }
     }
 }

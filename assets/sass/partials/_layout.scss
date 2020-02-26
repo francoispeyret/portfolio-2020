@@ -6,6 +6,16 @@ header {
 
 main {
     padding-top: 0;
+
+    @media (max-width: 769px) {
+        opacity: 1;
+        filter: none;
+        transition: ease-in-out 0.2s all;
+        &.menu-active {
+            opacity: 0.15;
+            filter: blur(5px);
+        }
+    }
 }
 
 header {
@@ -39,13 +49,13 @@ main {
         text-align: center;
         margin-top: calc(3rem + 100px);
         h1 {
-            font-size: 2.4rem;
+            font-size: 3.6rem;
         }
         svg {
             display: inline-block;
             fill: #fff;
-            height: 32px;
-            width: 32px;
+            height: 48px;
+            width: 48px;
             position: relative;
             top: 0.25rem;
         }

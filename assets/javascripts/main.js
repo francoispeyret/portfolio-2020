@@ -10,6 +10,11 @@ let headerArrow = {
 let main = {
 	el: document.querySelector('main')
 };
+let menu = {
+    el: document.querySelector('.header-menu'),
+    linksEls: document.querySelectorAll('.header-menu a'),
+    active: false
+};
 
 window.addEventListener('scroll', windowScroll);
 window.addEventListener('resize', windowScroll);
@@ -20,10 +25,44 @@ function windowScroll(e) {
 	headerArrow.el.setAttribute('style', 'left:'+ arrowPos +'px');
 }
 
+document.querySelector('#toggle-mobile').addEventListener('click', () => {
+    mobileMenu();
+});
+
+for(let e = 0; e < menu.linksEls.length; e++) {
+    menu.linksEls[e].addEventListener('click', () => {
+        mobileMenu();
+    })
+}
+
+function mobileMenu() {
+    if(menu.active === true) {
+        menu.el.classList.remove('active');
+        main.el.classList.remove('menu-active');
+    } else {
+        menu.el.classList.add('active');
+        main.el.classList.add('menu-active');
+    }
+    menu.active = !menu.active;
+}
+
+
 //----------------------------//
 //        GAME OVERLAY        //
 //----------------------------//
-let cursor, balls = [], bullets = [], asteroids = [];
+let cursor,
+    balls = [],
+    bullets = [],
+    asteroids = [],
+    startingAnimation = 90,
+    gameStarted = false;
+
+const buttonStart = document.querySelector('#play-start');
+
+buttonStart.addEventListener('click', () => {
+    gameStarted = true;
+    document.querySelector('#home').classList.add('started');
+});
 
 function setup() {
     var canvas = createCanvas(innerWidth - 4, innerHeight);
@@ -68,6 +107,21 @@ function setup() {
 
 function draw() {
     clear();
+
+    if(!gameStarted) {
+        return;
+    }
+
+    if(startingAnimation > 1) {
+        startingAnimation--;
+        const   scalingAnimation = map(startingAnimation, 90, 1, 0, 1),
+                translateAnimationX = map(startingAnimation, 90, 1, width/2, 0),
+                translateAnimationY = map(startingAnimation, 90, 1, height/2, 0);
+
+        translate(translateAnimationX, translateAnimationY);
+        scale(scalingAnimation, scalingAnimation);
+    }
+
     
     // BALLS
     for(let i = 0; i < balls.length; i++) {
@@ -173,7 +227,7 @@ function draw() {
         objectNoLimit(asteroids[a]);
     }
 
-    if(frameCount % 240 == 0 && asteroids.length < 40) {
+    if(frameCount % 240 == 0 && asteroids.length < 30) {
         let asteroidNewOne = {
             pos: createVector(random(0, width), random(0, height)),
             w: 100,
