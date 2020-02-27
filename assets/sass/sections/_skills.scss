@@ -46,10 +46,6 @@
                     font-size: 1rem;
                 }
 
-                &:hover {
-                    
-                }
-
             }
 
             &.prestashop {
@@ -95,12 +91,6 @@
             &.cypress {
                 strong:hover {
                     background: #04c38e;
-                }
-            }
-
-            @media (min-width: 769px) {
-                &:hover {
-                    
                 }
             }
         }
