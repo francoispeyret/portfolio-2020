@@ -17,12 +17,15 @@ if($_POST) {
         $success = false;
         $alert = 'Write more than 10 characters';
     } else {
-        $contact_address = 'peyretfr@gmail.com';
-        $contact_header = 'New contact - francoispeyret.fr / from :'. $email ;
+
+        $to = "contact@francoispeyret.fr";
+        $subject = "New contact message from ". $email;
+        $headers = "From:contact@francoispeyret.fr";
+
         try {
             $success = true;
             $alert = 'Your message has been sent succesfully!';
-            mail($contact_address, $contact_header, $message, $contact_header);
+            mail($to, $subject, $message, $headers);
         } catch (Exception $e) {
             $success = false;
             $alert = 'An error due to server, try again later.';

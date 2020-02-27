@@ -10,6 +10,7 @@
 
 html {
     scroll-behavior: smooth;
+    cursor: crosshair;
 }
 
 @media (max-width: 769px) {
@@ -19,8 +20,8 @@ html {
     }
 }
 
-::-moz-selection { background: #0009; }
-::selection { background: #0009; }
+::-moz-selection { background: transparent; }
+::selection { background: transparent; }
 
 body {
     color: white;

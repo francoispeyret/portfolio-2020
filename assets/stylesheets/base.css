@@ -23,26 +23,27 @@
 /* line 11, ../sass/partials/_utilities.scss */
 html {
   scroll-behavior: smooth;
+  cursor: crosshair;
 }
 
 @media (max-width: 769px) {
-  /* line 16, ../sass/partials/_utilities.scss */
+  /* line 17, ../sass/partials/_utilities.scss */
   html, body {
     width: 100%;
     overflow-x: hidden;
   }
 }
-/* line 22, ../sass/partials/_utilities.scss */
-::-moz-selection {
-  background: #0009;
-}
-
 /* line 23, ../sass/partials/_utilities.scss */
-::selection {
-  background: #0009;
+::-moz-selection {
+  background: transparent;
 }
 
-/* line 25, ../sass/partials/_utilities.scss */
+/* line 24, ../sass/partials/_utilities.scss */
+::selection {
+  background: transparent;
+}
+
+/* line 26, ../sass/partials/_utilities.scss */
 body {
   color: white;
   background-color: #2d325a;
@@ -59,22 +60,22 @@ body {
     background-color: #5a2d3e;
   }
 }
-/* line 42, ../sass/partials/_utilities.scss */
+/* line 43, ../sass/partials/_utilities.scss */
 body::-webkit-scrollbar {
   width: 4px;
 }
-/* line 45, ../sass/partials/_utilities.scss */
+/* line 46, ../sass/partials/_utilities.scss */
 body::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
-/* line 49, ../sass/partials/_utilities.scss */
+/* line 50, ../sass/partials/_utilities.scss */
 body::-webkit-scrollbar-thumb {
   background-color: #fff;
   outline: 1px solid slategrey;
 }
 
-/* line 55, ../sass/partials/_utilities.scss */
+/* line 56, ../sass/partials/_utilities.scss */
 a {
   color: white;
   text-decoration: none;
@@ -530,30 +531,57 @@ footer .back-to-top a:hover svg {
   }
 }
 /* line 46, ../sass/sections/_contact.scss */
+#contact #loader {
+  height: 40px;
+  width: 40px;
+  display: block;
+  border-radius: 40px;
+  border: 2px solid #fff;
+  border-left-color: #fff3;
+  border-right-color: #fff3;
+  border-left-style: dotted;
+  border-right-style: dotted;
+  animation: rotate ease-in-out 0.75s infinite;
+  transition: ease 0.2s all;
+  opacity: 0;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+/* line 69, ../sass/sections/_contact.scss */
+#contact #loader.active {
+  opacity: 1;
+}
+/* line 74, ../sass/sections/_contact.scss */
 #contact form {
   display: flex;
   flex-wrap: wrap;
 }
-/* line 49, ../sass/sections/_contact.scss */
+/* line 77, ../sass/sections/_contact.scss */
 #contact form p {
   flex: 0 0 100%;
   max-width: 100%;
   display: block;
 }
-/* line 53, ../sass/sections/_contact.scss */
+/* line 81, ../sass/sections/_contact.scss */
 #contact form p label, #contact form p input, #contact form p textarea {
   display: block;
   width: 100%;
 }
-/* line 59, ../sass/sections/_contact.scss */
+/* line 87, ../sass/sections/_contact.scss */
 #contact form label {
   margin-bottom: 0.33rem;
 }
-/* line 63, ../sass/sections/_contact.scss */
+/* line 91, ../sass/sections/_contact.scss */
 #contact form input, #contact form textarea {
   letter-spacing: 0.1em;
 }
-/* line 67, ../sass/sections/_contact.scss */
+/* line 95, ../sass/sections/_contact.scss */
 #contact form input, #contact form textarea, #contact form button {
   background: none;
   color: #fff;
@@ -563,15 +591,15 @@ footer .back-to-top a:hover svg {
   margin-bottom: 1rem;
   transition: border ease 0.25s, color ease 0.25s;
 }
-/* line 76, ../sass/sections/_contact.scss */
+/* line 104, ../sass/sections/_contact.scss */
 #contact form input::placeholder, #contact form textarea::placeholder, #contact form button::placeholder {
   color: #fff3;
 }
-/* line 80, ../sass/sections/_contact.scss */
+/* line 108, ../sass/sections/_contact.scss */
 #contact form input:active, #contact form input:focus, #contact form input:hover, #contact form textarea:active, #contact form textarea:focus, #contact form textarea:hover, #contact form button:active, #contact form button:focus, #contact form button:hover {
   border-color: #fff;
 }
-/* line 87, ../sass/sections/_contact.scss */
+/* line 115, ../sass/sections/_contact.scss */
 #contact form button {
   text-transform: uppercase;
   font-weight: 800;
@@ -579,7 +607,7 @@ footer .back-to-top a:hover svg {
   font-size: 1.45rem;
   transition: all 0.25s cubic-bezier(0.71, -0.29, 0.63, 2.11);
 }
-/* line 95, ../sass/sections/_contact.scss */
+/* line 123, ../sass/sections/_contact.scss */
 #contact form button:focus, #contact form button:active, #contact form button:hover {
   background: #fff;
   color: #000;
@@ -654,80 +682,66 @@ footer .back-to-top a:hover svg {
 #skills ul {
   margin-top: 2rem;
   list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-/* line 25, ../sass/sections/_skills.scss */
-#skills ul:hover li {
-  opacity: 0.66;
-}
-/* line 30, ../sass/sections/_skills.scss */
+/* line 27, ../sass/sections/_skills.scss */
 #skills ul li {
   position: relative;
   display: inline-block;
   transition: ease 0.2s all;
-  padding: 0.85rem 1.5rem;
-  font-weight: 800;
 }
-/* line 37, ../sass/sections/_skills.scss */
-#skills ul li img {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  display: block;
-  max-width: 128px;
-  margin-bottom: 0.5rem;
-  margin-left: auto;
-  margin-right: auto;
-  filter: grayscale(1) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.3));
-  transition: ease 0.2s all;
-}
-@media (max-width: 769px) {
-  /* line 37, ../sass/sections/_skills.scss */
-  #skills ul li img {
-    max-width: 92px;
-  }
-}
-/* line 53, ../sass/sections/_skills.scss */
+/* line 32, ../sass/sections/_skills.scss */
 #skills ul li strong {
+  display: block;
   transition: ease 0.2s all;
   display: block;
-  font-size: 0.75rem;
+  font-size: 1.8rem;
+  padding: 0.65rem 1.15rem;
+  border: 2px solid #fff;
+  margin-right: -2px;
+  margin-bottom: -2px;
 }
-@media (min-width: 769px) {
-  /* line 53, ../sass/sections/_skills.scss */
-  #skills ul li strong {
-    opacity: 0;
-    position: absolute;
-    z-index: 5;
-    left: 50%;
-    transform: translateX(-50%) translateY(-25px);
-    border-radius: 0.25rem;
-    padding: 0.15rem 0.5rem;
-    white-space: nowrap;
-    background-color: #0006;
-  }
-  /* line 67, ../sass/sections/_skills.scss */
-  #skills ul li strong::before {
-    content: "";
-    display: block;
-    border: 5px solid transparent;
-    border-bottom-color: #0006;
-    position: absolute;
-    left: calc(50% - 2.5px);
-    top: -10px;
-  }
+/* line 43, ../sass/sections/_skills.scss */
+#skills ul li strong::before {
+  content: "#";
+  font-weight: 300;
+  font-size: 1rem;
 }
-@media (min-width: 769px) {
-  /* line 80, ../sass/sections/_skills.scss */
-  #skills ul li:hover {
-    opacity: 1;
-    z-index: 5;
-  }
-  /* line 83, ../sass/sections/_skills.scss */
-  #skills ul li:hover img {
-    filter: grayscale(0);
-  }
-  /* line 86, ../sass/sections/_skills.scss */
-  #skills ul li:hover strong {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-10px);
-  }
+/* line 56, ../sass/sections/_skills.scss */
+#skills ul li.prestashop strong:hover {
+  background: #7c1b4c;
+}
+/* line 61, ../sass/sections/_skills.scss */
+#skills ul li.shopify strong:hover {
+  background: #07ad23;
+}
+/* line 66, ../sass/sections/_skills.scss */
+#skills ul li.adobe strong:hover {
+  background: #c00606;
+}
+/* line 71, ../sass/sections/_skills.scss */
+#skills ul li.sass strong:hover {
+  background: #c00682;
+}
+/* line 76, ../sass/sections/_skills.scss */
+#skills ul li.javascript strong:hover {
+  background: #807d00;
+}
+/* line 81, ../sass/sections/_skills.scss */
+#skills ul li.webpack strong:hover {
+  background: #004280;
+}
+/* line 86, ../sass/sections/_skills.scss */
+#skills ul li.php strong:hover {
+  background: #4F5B93;
+}
+/* line 91, ../sass/sections/_skills.scss */
+#skills ul li.react strong:hover {
+  background: #3997b1;
+}
+/* line 96, ../sass/sections/_skills.scss */
+#skills ul li.cypress strong:hover {
+  background: #04c38e;
 }

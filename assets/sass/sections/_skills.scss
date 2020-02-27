@@ -20,73 +20,87 @@
     ul {
         margin-top: 2rem;
         list-style: none;
-
-        &:hover {
-            li {
-                opacity: 0.66;
-            }
-        }
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
 
         li {
             position: relative;
             display: inline-block;
             transition: $easing;
-            padding: 0.85rem 1.5rem;
-            font-weight: 800;
-
-            img {
-                //background-color: #1115;
-                padding: 1rem;
-                border-radius: 0.5rem;
-                display: block;
-                max-width: 128px;
-                margin-bottom: 0.5rem;
-                margin-left: auto;
-                margin-right: auto;
-                filter: grayscale(1) drop-shadow(0 10px 10px rgba(#000,0.3));
-                transition: $easing;
-                @media (max-width: 769px) {
-                    max-width: 92px;
-                }
-            }
 
             strong {
+                display: block;
                 transition: $easing;
                 display: block;
-                font-size: 0.75rem;
-                @media (min-width: 769px) {
-                    opacity: 0;
-                    position: absolute;z-index: 5;
-                    left: 50%;
-                    transform: translateX(-50%) translateY(-25px);
-                    border-radius: 0.25rem;
-                    padding: 0.15rem 0.5rem;
-                    white-space: nowrap;
-                    background-color: #0006;
+                font-size: 1.8rem;
+                padding: 0.65rem 1.15rem;
 
-                    &::before {
-                        content:"";
-                        display: block;
-                        border: 5px solid transparent;
-                        border-bottom-color: #0006;
-                        position: absolute;
-                        left: calc(50% - 2.5px);
-                        top: -10px;
-                    }
+                border: 2px solid #fff;
+                margin-right: -2px;
+                margin-bottom: -2px;
+
+                &::before {
+                    content:"#";
+                    font-weight: 300;
+                    font-size: 1rem;
+                }
+
+                &:hover {
+                    
+                }
+
+            }
+
+            &.prestashop {
+                strong:hover {
+                    background: #7c1b4c;
+                }
+            }
+            &.shopify {
+                strong:hover {
+                    background: #07ad23;
+                }
+            }
+            &.adobe {
+                strong:hover {
+                    background: #c00606;
+                }
+            }
+            &.sass {
+                strong:hover {
+                    background: #c00682;
+                }
+            }
+            &.javascript {
+                strong:hover {
+                    background: #807d00;
+                }
+            }
+            &.webpack {
+                strong:hover {
+                    background: #004280;
+                }
+            }
+            &.php {
+                strong:hover {
+                    background: #4F5B93;
+                }
+            }
+            &.react {
+                strong:hover {
+                    background: #3997b1;
+                }
+            }
+            &.cypress {
+                strong:hover {
+                    background: #04c38e;
                 }
             }
 
             @media (min-width: 769px) {
                 &:hover {
-                    opacity: 1;
-                    z-index: 5;
-                    img {
-                        filter: grayscale(0);
-                    }
-                    strong {
-                        opacity: 1;
-                        transform: translateX(-50%) translateY(-10px);
-                    }
+                    
                 }
             }
         }

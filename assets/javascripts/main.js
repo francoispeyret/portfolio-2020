@@ -51,7 +51,52 @@ function mobileMenu() {
 //        CONTACT FORM        //
 //----------------------------//
 
+let contactForm = {
+    el: document.querySelector('#contact form'),
+    loaderEl: document.querySelector('#contact #loader')
+};
 
+contactForm.el.addEventListener('submit', (e) => {
+    e.preventDefault();
+    contactFormAwait();
+    
+    let data = new FormData();
+    data.append('email', document.querySelector('#contact form #email').value);
+    data.append('message', document.querySelector('#contact form #message').value);
+
+    fetch('/contact.php', {
+        method: 'POST',
+        body: data
+    })
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        if(typeof data.alert !== 'undefined') {
+            contactFormDisplayMesssage(data.alert);
+        } else {
+            contactFormDisplayMesssage(null);
+        }
+    })
+    .catch((error) => {
+        contactFormDisplayMesssage(error);
+    });
+
+    console.log(data);
+});
+
+function contactFormAwait() {
+    if(contactForm.loaderEl.classList.length <= 0) {
+        contactForm.loaderEl.classList.add('active');
+    } else {
+        contactForm.loaderEl.classList.remove('active');
+    }
+}
+
+function contactFormDisplayMesssage(message) {
+
+    contactFormAwait();
+}
 
 
 
@@ -63,7 +108,8 @@ let cursor,
     bullets = [],
     asteroids = [],
     startingAnimation = 90,
-    gameStarted = true;
+    ultimateDelay = 30,
+    gameStarted = false;
 
 const buttonStart = document.querySelector('#play-start');
 
@@ -80,7 +126,8 @@ function setup() {
         pos: createVector(width/2, height/2),
         w: 15,
         wMax: 15,
-        clickedAnimationCount: 45
+        clickedAnimationCount: 45,
+        ultimateAnimationCount: 45
     };
 
     for(let i = 0; i < 33; i++) {
@@ -181,6 +228,29 @@ function draw() {
             vertex(-20, 10);
             vertex(-20, -10);
         endShape(CLOSE);
+        
+        if(ultimateDelay == true) {
+            cursor.ultimateAnimationCount--;
+            const ultimateDistance = map(cursor.ultimateAnimationCount, 45, 0, 0, width*1.5);
+            
+            beginShape();
+                vertex(0, 0);
+                vertex(4, -3);
+                vertex(ultimateDistance, -60);
+                vertex(ultimateDistance+50, -50);
+                vertex(ultimateDistance+100, -20);
+                vertex(ultimateDistance+115, 0);
+                vertex(ultimateDistance+100, 20);
+                vertex(ultimateDistance+50, 50);
+                vertex(ultimateDistance, 60);
+                vertex(4, 3);
+            endShape(CLOSE);
+
+            if(cursor.ultimateAnimationCount < 0) {
+                cursor.ultimateAnimationCount = 45;
+                ultimateDelay = false;
+            }
+        }
     pop();
     
     if(cursor.clickedAnimationCount > 0) {
@@ -257,6 +327,15 @@ function mouseClicked() {
         target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(10)
     });
 }
+
+window.addEventListener('keydown', (e) => {
+    if(e.keyCode == 17) {
+        ultimateDelay = true;
+        console.log(ultimateDelay);
+        e.preventDefault();
+        return false;
+    }
+});
 
 function windowResized() {
     resizeCanvas(innerWidth - 4, innerHeight);

@@ -73,40 +73,31 @@
                     Here is a non-exhaustive list of my daily tools:
                 </p>
                 <ul>
-                    <li>
-                        <img src="./assets/images/prestashop.png" alt="PrestaShop Logo">
+                    <li class="prestashop">
                         <strong>PrestaShop</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/shopify.png" alt="Shopify Logo">
+                    <li class="shopify">
                         <strong>Shopify</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/adobe.png" alt="Adobe Logo">
+                    <li class="adobe">
                         <strong>Adobe Creative Suite</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/sass.png" alt="Sass Logo">
+                    <li class="sass">
                         <strong>Sass</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/js.png" alt="Javascript Logo">
+                    <li class="javascript">
                         <strong>JavaScript</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/webpack.png" alt="Webpack Logo">
+                    <li class="webpack">
                         <strong>Webpack</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/php.png" alt="PHP Logo">
+                    <li class="php">
                         <strong>PHP</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/reactjs.png" alt="React Logo">
+                    <li class="react">
                         <strong>React</strong>
                     </li>
-                    <li>
-                        <img src="./assets/images/cypress.png" alt="Cypress.io Logo">
+                    <li class="cypress">
                         <strong>Cypress.io</strong>
                     </li>
                 </ul>
@@ -119,10 +110,10 @@
                     Contact me
                 </h2>
 
-                <form action="">
+                <form action="#contact">
                     <p>
                         <label for="email">eMail</label>
-                        <input type="email" name="subject" placeholder="Write here your email..." required>
+                        <input type="email" id="email" name="email" placeholder="Write here your email..." required>
                     </p>
                     <p>
                         <label for="message">Message</label>
@@ -132,6 +123,8 @@
                         Send
                     </button>
                 </form>
+
+                <div id="loader"></div>
             </div>
         </section>
     </main>
