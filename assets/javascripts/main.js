@@ -81,8 +81,6 @@ contactForm.el.addEventListener('submit', (e) => {
     .catch((error) => {
         contactFormDisplayMesssage(error);
     });
-
-    console.log(data);
 });
 
 function contactFormAwait() {
@@ -94,7 +92,7 @@ function contactFormAwait() {
 }
 
 function contactFormDisplayMesssage(message) {
-
+    // @todo : display alert message after the form
     contactFormAwait();
 }
 
@@ -109,6 +107,8 @@ let cursor,
     asteroids = [],
     startingAnimation = 90,
     ultimateDelay = 30,
+    scoring = 0,
+    scoreText = [],
     gameStarted = false;
 
 const buttonStart = document.querySelector('#play-start');
@@ -163,6 +163,7 @@ function setup() {
 
 function draw() {
     clear();
+    textFont('Proxima');
 
     if(!gameStarted) {
         return;
@@ -283,6 +284,7 @@ function draw() {
             if(typeof bullets[b] != 'undefined') {
                 if(asteroids[a].pos.dist(bullets[b].pos) <= asteroids[a].w / 2) {
                     asteroidSubdivise(asteroids[a]);
+                    scoreAddAmout(asteroids[a].w, asteroids[a].pos)
                     asteroids.splice(a, 1);
                     a--;
                     bullets.splice(b, 1);
@@ -316,6 +318,34 @@ function draw() {
             angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
         };
         asteroids.push(asteroidNewOne);
+    }
+
+    // SCORING $$$
+    
+    if(startingAnimation <= 1) {
+        noStroke();
+        fill(255);
+        textSize(28);
+        text('€'+scoring, 150, 58);
+
+        console.log(scoreText.length);
+
+        for(let s = 0; s < scoreText.length; s++) {
+            const   amoutFontSize = map(scoreText[s].amout, 40, 100, 14, 22),
+                    amoutOpacity = map(scoreText[s].life, 100, 0, 255, 0);
+
+
+            fill(255, amoutOpacity);
+            textSize(amoutFontSize);
+            text('+'+scoreText[s].amout, scoreText[s].pos.x, scoreText[s].pos.y);
+            scoreText[s].pos.add(createVector(0,-0.5));
+
+            scoreText[s].life--;
+            if(scoreText[s].life <= 0) {
+                scoreText.splice(s, 1);
+                s--;
+            }
+        }
     }
 }
 
@@ -423,4 +453,17 @@ function asteroidShape(rand) {
     }
     endShape(CLOSE);
     pop();
+}
+
+function scoreAddAmout(amout, asteroidPosition) {
+    if(amout > 0) {
+        scoring += amout;
+        let scoreTextPös = createVector(asteroidPosition.x, asteroidPosition.y);
+            scoreTextPös.add(createVector(random(-40,40),random(40,-40)))
+        scoreText.push({
+            pos: scoreTextPös,
+            amout: amout,
+            life: amout
+        });
+    }
 }

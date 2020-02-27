@@ -685,14 +685,15 @@ footer .back-to-top a:hover svg {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 1160px;
 }
-/* line 27, ../sass/sections/_skills.scss */
+/* line 28, ../sass/sections/_skills.scss */
 #skills ul li {
   position: relative;
   display: inline-block;
   transition: ease 0.2s all;
 }
-/* line 32, ../sass/sections/_skills.scss */
+/* line 33, ../sass/sections/_skills.scss */
 #skills ul li strong {
   display: block;
   transition: ease 0.2s all;
@@ -703,45 +704,45 @@ footer .back-to-top a:hover svg {
   margin-right: -2px;
   margin-bottom: -2px;
 }
-/* line 43, ../sass/sections/_skills.scss */
+/* line 44, ../sass/sections/_skills.scss */
 #skills ul li strong::before {
   content: "#";
   font-weight: 300;
   font-size: 1rem;
 }
-/* line 52, ../sass/sections/_skills.scss */
+/* line 53, ../sass/sections/_skills.scss */
 #skills ul li.prestashop strong:hover {
   background: #7c1b4c;
 }
-/* line 57, ../sass/sections/_skills.scss */
+/* line 58, ../sass/sections/_skills.scss */
 #skills ul li.shopify strong:hover {
   background: #07ad23;
 }
-/* line 62, ../sass/sections/_skills.scss */
+/* line 63, ../sass/sections/_skills.scss */
 #skills ul li.adobe strong:hover {
   background: #c00606;
 }
-/* line 67, ../sass/sections/_skills.scss */
+/* line 68, ../sass/sections/_skills.scss */
 #skills ul li.sass strong:hover {
   background: #c00682;
 }
-/* line 72, ../sass/sections/_skills.scss */
+/* line 73, ../sass/sections/_skills.scss */
 #skills ul li.javascript strong:hover {
   background: #807d00;
 }
-/* line 77, ../sass/sections/_skills.scss */
+/* line 78, ../sass/sections/_skills.scss */
 #skills ul li.webpack strong:hover {
   background: #004280;
 }
-/* line 82, ../sass/sections/_skills.scss */
+/* line 83, ../sass/sections/_skills.scss */
 #skills ul li.php strong:hover {
   background: #4F5B93;
 }
-/* line 87, ../sass/sections/_skills.scss */
+/* line 88, ../sass/sections/_skills.scss */
 #skills ul li.react strong:hover {
   background: #3997b1;
 }
-/* line 92, ../sass/sections/_skills.scss */
+/* line 93, ../sass/sections/_skills.scss */
 #skills ul li.cypress strong:hover {
   background: #04c38e;
 }
