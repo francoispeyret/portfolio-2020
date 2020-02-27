@@ -109,7 +109,7 @@ let cursor,
     ultimateDelay = 30,
     scoring = 0,
     scoreText = [],
-    gameStarted = false;
+    gameStarted = true;
 
 const buttonStart = document.querySelector('#play-start');
 
@@ -257,7 +257,7 @@ function draw() {
     if(cursor.clickedAnimationCount > 0) {
         const cursorClickedSize = map(cursor.clickedAnimationCount, 45, 1, 0, cursor.w + 80);
         noFill();
-        strokeWeight(1);
+        strokeWeight(2);
         stroke(255, map(cursorClickedSize, cursor.w, cursor.w + 80, 255, 0));
         circle(cursor.pos.x, cursor.pos.y, cursorClickedSize);
         
@@ -328,8 +328,6 @@ function draw() {
         textSize(28);
         text('€'+scoring, 150, 58);
 
-        console.log(scoreText.length);
-
         for(let s = 0; s < scoreText.length; s++) {
             const   amoutFontSize = map(scoreText[s].amout, 40, 100, 14, 22),
                     amoutOpacity = map(scoreText[s].life, 100, 0, 255, 0);
@@ -350,18 +348,23 @@ function draw() {
 }
 
 function mouseClicked() {
-    cursor.clickedAnimationCount = 45;
-
-    bullets.push({
-        pos: createVector(cursor.pos.x, cursor.pos.y),
-        target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(10)
-    });
 }
+
+window.addEventListener('mousedown', (e) => {
+    if(e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
+        e.preventDefault();
+        cursor.clickedAnimationCount = 45;
+    
+        bullets.push({
+            pos: createVector(cursor.pos.x, cursor.pos.y),
+            target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(10)
+        });
+    }
+})
 
 window.addEventListener('keydown', (e) => {
     if(e.keyCode == 17) {
         ultimateDelay = true;
-        console.log(ultimateDelay);
         e.preventDefault();
         return false;
     }
