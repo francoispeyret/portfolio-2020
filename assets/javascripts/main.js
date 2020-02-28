@@ -2,14 +2,15 @@
 //----------------------------//
 //        GAME OVERLAY        //
 //----------------------------//
-let cursor,
+let debug = false,
+    cursor,
     balls = [],
     bullets = [],
     asteroids = [],
     ultimateDelay = 30,
     scoring = 0,
     scoreText = [],
-    gameStarted = false,
+    gameStarted = true,
     startingAnimation = 90,
     level = 1,
     levelAnimation = 180,
@@ -45,6 +46,7 @@ function setup() {
 }
 
 function draw() {
+    clear();
 	
 	// BREAKPOINT for Mobile Devices
 	if(width < 769) 
@@ -57,6 +59,36 @@ function draw() {
         return;
     }
 
+
+    // INTERFACE
+
+    // SCORING $$$
+    
+    noStroke();
+    fill(255);
+    textAlign(LEFT);
+    textSize(28);
+    text('€'+scoring, 25, 120);
+    textSize(14);
+    text('LVL'+level, 25, 140);
+
+    for(let s = 0; s < scoreText.length; s++) {
+        const   amoutFontSize = map(scoreText[s].amout, 40, 100, 14, 22),
+                amoutOpacity = map(scoreText[s].life, 100, 0, 255, 150);
+
+        fill(255, amoutOpacity);
+        textSize(amoutFontSize);
+        text('+'+scoreText[s].amout, scoreText[s].pos.x, scoreText[s].pos.y);
+        scoreText[s].pos.add(createVector(0,-0.5));
+
+        scoreText[s].life--;
+        if(scoreText[s].life <= 0) {
+            scoreText.splice(s, 1);
+            s--;
+        }
+    }
+
+    // \\ INTERFACE
     // STAGE ANNONCEMENT
     if(levelAnimation > 1) {
         fill(255);
@@ -70,6 +102,11 @@ function draw() {
         }
         return;
     }
+
+    
+
+    // animation scaling
+    push();
 
     if(startingAnimation > 1) {
         startingAnimation--;
@@ -94,7 +131,6 @@ function draw() {
     }
     noFill();
 
-
     // CURSOR
     let angle = createVector(width / 2, 0).heading();
     if(mouseX != 0 || mouseY != 0) {
@@ -115,7 +151,7 @@ function draw() {
             cursor.pos.add(vel);
         }
         angle = createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).heading();
-	}
+    }
         
     noStroke();
     fill(255);
@@ -199,9 +235,11 @@ function draw() {
         push();
             translate(asteroids[a].pos.x, asteroids[a].pos.y);
             rotate(asteroids[a].angle);
-            asteroidShape(asteroids[a].w);
+            asteroidShape(asteroids[a].w, asteroids[a].seed, asteroids[a].spawnAnimation);
         pop();
         
+        if(asteroids[a].spawnAnimation > 1)
+            asteroids[a].spawnAnimation--;
         asteroids[a].pos.add(asteroids[a].vel);
 
         objectNoLimit(asteroids[a]);
@@ -213,13 +251,7 @@ function draw() {
 
             // Fix the asteroids jam if player is inactive
             if( asteroids.length < levelAsteroidsMaxium) {
-                let asteroidNewOne = {
-                    pos: createVector(random(0, width), random(0, height)),
-                    vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
-                    w: 100,
-                    angle: random(0, TWO_PI),
-                    angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
-                };
+                let asteroidNewOne = asteroidCreate(100);
                 asteroids.push(asteroidNewOne);
             }
         } else {
@@ -228,34 +260,8 @@ function draw() {
         }
     }
 
-    // SCORING $$$
-    
-    if(startingAnimation <= 1) {
-        noStroke();
-        fill(255);
-        textAlign(LEFT);
-        textSize(28);
-        text('€'+scoring, 150, 58);
-
-        for(let s = 0; s < scoreText.length; s++) {
-            const   amoutFontSize = map(scoreText[s].amout, 40, 100, 14, 22),
-                    amoutOpacity = map(scoreText[s].life, 100, 0, 255, 0);
-
-
-            fill(255, amoutOpacity);
-            textSize(amoutFontSize);
-            text('+'+scoreText[s].amout, scoreText[s].pos.x, scoreText[s].pos.y);
-            scoreText[s].pos.add(createVector(0,-0.5));
-
-            scoreText[s].life--;
-            if(scoreText[s].life <= 0) {
-                scoreText.splice(s, 1);
-                s--;
-            }
-        }
-    }
+    pop();
 }
-
 
 window.addEventListener('mousedown', (e) => {
     if(e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
@@ -270,7 +276,7 @@ window.addEventListener('mousedown', (e) => {
             target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(10)
         });
     }
-})
+});
 
 window.addEventListener('keydown', (e) => {
     if(e.keyCode == 17) {
@@ -299,97 +305,134 @@ function objectNoLimit(object) {
 }
 
 function asteroidsSpawn() {
-
     const asteroidsLenght = map(level, 1, 3, 1, 5);
 
     for(let a = 0; a < asteroidsLenght; a++) {
-        
         let randShape, rand = Math.floor(random(1, 4));
         
         if(rand == 1) {
-            randShape = 40;
+            randShape = 30;
         } else if( rand == 2) {
-            randShape = 60;
+            randShape = 50;
         } else if( rand == 3) {
             randShape = 100;
         }
-
-        asteroids[a] = {
-            pos: createVector(random(0, width), random(0, height)),
-            vel: createVector(random(.75,-.75), random(.75,-.75)),
-            w: randShape,
-            angle: random(0, TWO_PI),
-            angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
-        };
+        asteroids.push(asteroidCreate(randShape));
     }
-
 }
 
 function asteroidSubdivise(asteroidBefore) {
     
-    if(asteroidBefore.w == 40) {
+    if(asteroidBefore.w == 30) {
         // pouf
         return;
-    } else if( asteroidBefore.w == 60) {
-        randShape = 40;
+    } else if( asteroidBefore.w == 50) {
+        randShape = 30;
     } else if( asteroidBefore.w == 100) {
-        randShape = 60;
+        randShape = 50;
     }
 
-    let asteroidOne = {
-        pos: createVector(asteroidBefore.pos.x, asteroidBefore.pos.y),
-        w: randShape,
-        angle: random(0, TWO_PI),
-        vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
-        angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
-    }, asteroidTwo = {
-        pos: createVector(asteroidBefore.pos.x, asteroidBefore.pos.y),
-        w: randShape,
-        angle: random(0, TWO_PI),
-        vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
-        angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
-    };
+    let asteroidOne = asteroidCreate(randShape, asteroidBefore.pos),
+        asteroidTwo = asteroidCreate(randShape, asteroidBefore.pos);
 
     asteroids.push(asteroidOne);
     asteroids.push(asteroidTwo);
 }
 
-function asteroidShape(rand) {
-    stroke(255);
+function asteroidCreate(size, origin) {
+    let position;
+    if(typeof origin !== 'undefined') {
+        position = createVector(origin.x, origin.y);
+    } else {
+        position = createVector(random(0, width), random(0, height));
+    }
+    return {
+        pos: position,
+        seed: Math.floor(random(1,3)),
+        vel: createVector(random(1,-1), random(1,-1)),
+        w: size,
+        spawnAnimation: 20,
+        angle: random(0, TWO_PI),
+        angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
+    };
+}
+
+function asteroidShape(size, seed, spawnAnimation) {
+    if(debug) {
+        noFill();
+        stroke(255,0,0);
+        strokeWeight(1);
+        circle(0,0,size, size);    
+    }
+    const alpha = map(spawnAnimation, 20, 1, 0, 255);
+    stroke(255, alpha);
     strokeWeight(2);
     noFill();
     beginShape();
 
-    //circle(0,0,rand, rand);
-
+    
     push();
-    translate(-rand/2,-rand/2);
-    if(rand == 40) {
-        vertex(4, 7);
-        vertex(20, 5);
-        vertex(23, 15);
-        vertex(15, 25);
-        vertex(5, 20);
-    } else if( rand == 60) {
-        vertex(8, 7);
-        vertex(20, 5);
-        vertex(40, 9);
-        vertex(50, 25);
-        vertex(45, 45);
-        vertex(30, 35);
-        vertex(16, 40);
-        vertex(5, 25);
-    } else if( rand == 100) {
-        vertex(22, 7);
-        vertex(40, 12);
-        vertex(60, 9);
-        vertex(75, 35);
-        vertex(65, 65);
-        vertex(40, 80);
-        vertex(20, 80);
-        vertex(14, 60);
-        vertex(16, 40);
-        vertex(10, 19);
+    translate(-size/2,-size/2);
+    if(size == 30) {
+        if(seed == 1) {
+            vertex(4, 7);
+            vertex(20, 5);
+            vertex(23, 15);
+            vertex(15, 25);
+            vertex(5, 20);
+        } else if(seed == 2) {
+            vertex(0, 7);
+            vertex(6, 2);
+            vertex(20, 5);
+            vertex(23, 15);
+            vertex(18, 18);
+            vertex(12, 22);
+            vertex(5, 20);
+        }
+    } else if( size == 50) {
+        if(seed == 1) {
+            vertex(8, 10);
+            vertex(22, 13);
+            vertex(40, 9);
+            vertex(50, 15);
+            vertex(40, 25);
+            vertex(45, 35);
+            vertex(45, 45);
+            vertex(30, 45);
+            vertex(16, 40);
+            vertex(5, 25);
+        } else if(seed == 2) {
+            vertex(8, 7);
+            vertex(20, 5);
+            vertex(40, 9);
+            vertex(50, 25);
+            vertex(45, 45);
+            vertex(30, 35);
+            vertex(16, 40);
+            vertex(5, 25);
+        }
+    } else if( size == 100) {
+        if(seed == 1) {
+            vertex(22, 7);
+            vertex(40, 12);
+            vertex(60, 9);
+            vertex(75, 35);
+            vertex(65, 65);
+            vertex(40, 80);
+            vertex(20, 80);
+            vertex(14, 60);
+            vertex(16, 40);
+            vertex(10, 19);
+        } else if(seed == 2) {
+            vertex(60, 9);
+            vertex(75, 35);
+            vertex(80, 75);
+            vertex(55, 70);
+            vertex(40, 75);
+            vertex(14, 60);
+            vertex(16, 40);
+            vertex(22, 5);
+        }
     }
     endShape(CLOSE);
     pop();
@@ -411,5 +454,6 @@ function scoreAddAmout(amout, asteroidPosition) {
 function levelUpStage() {
     level++;
     levelAnimation = 180;
-    levelAsteroidsMaxium = map(level, 1, 3, 12, 33);
+    levelAsteroidsMaxium = map(level, 1, 3, 8, 25);
+    bullets = [];
 }
