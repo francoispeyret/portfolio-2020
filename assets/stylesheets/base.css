@@ -615,17 +615,23 @@ footer .back-to-top a:hover svg {
   cursor: pointer;
 }
 
-/* line 2, ../sass/sections/_home.scss */
+/* line 1, ../sass/sections/_home.scss */
+#home {
+  min-height: 100vh;
+  margin: 0 -1.5rem;
+  padding: 100px 3rem;
+}
+/* line 5, ../sass/sections/_home.scss */
 #home .content {
   transition: ease-in all 0.5s;
 }
-/* line 8, ../sass/sections/_home.scss */
+/* line 11, ../sass/sections/_home.scss */
 #home.started .content {
   transform: translateY(-100%);
   opacity: 0;
   pointer-events: none;
 }
-/* line 15, ../sass/sections/_home.scss */
+/* line 18, ../sass/sections/_home.scss */
 #home #p5-holder {
   position: fixed;
   z-index: 100;
@@ -635,7 +641,7 @@ footer .back-to-top a:hover svg {
   top: 0;
   bottom: 0;
 }
-/* line 25, ../sass/sections/_home.scss */
+/* line 28, ../sass/sections/_home.scss */
 #home #play-start {
   margin: 3rem auto;
   display: block;
@@ -650,7 +656,7 @@ footer .back-to-top a:hover svg {
   outline: none;
   transition: all 0.25s cubic-bezier(0.71, -0.29, 0.63, 2.11);
 }
-/* line 40, ../sass/sections/_home.scss */
+/* line 43, ../sass/sections/_home.scss */
 #home #play-start:focus, #home #play-start:active, #home #play-start:hover {
   background: #fff;
   color: #000;

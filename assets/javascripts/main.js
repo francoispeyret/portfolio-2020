@@ -1,103 +1,4 @@
 
-
-//-----------------------//
-//        HEADER        //
-//----------------------//
-let headerArrow = {
-	el: document.querySelector('header .arrow'),
-	step: 0
-};
-let main = {
-	el: document.querySelector('main')
-};
-let menu = {
-    el: document.querySelector('.header-menu'),
-    linksEls: document.querySelectorAll('.header-menu a'),
-    active: false
-};
-
-window.addEventListener('scroll', windowScroll);
-window.addEventListener('resize', windowScroll);
-
-function windowScroll(e) {
-	const pos = main.el.getBoundingClientRect();
-	const arrowPos = Math.floor((( -pos.y * (pos.width + 25) / pos.height) - 5));
-	headerArrow.el.setAttribute('style', 'left:'+ arrowPos +'px');
-}
-
-document.querySelector('#toggle-mobile').addEventListener('click', () => {
-    mobileMenu();
-});
-
-for(let e = 0; e < menu.linksEls.length; e++) {
-    menu.linksEls[e].addEventListener('click', () => {
-        mobileMenu();
-    })
-}
-
-function mobileMenu() {
-    if(menu.active === true) {
-        menu.el.classList.remove('active');
-        main.el.classList.remove('menu-active');
-    } else {
-        menu.el.classList.add('active');
-        main.el.classList.add('menu-active');
-    }
-    menu.active = !menu.active;
-}
-
-
-//----------------------------//
-//        CONTACT FORM        //
-//----------------------------//
-
-let contactForm = {
-    el: document.querySelector('#contact form'),
-    loaderEl: document.querySelector('#contact #loader')
-};
-
-contactForm.el.addEventListener('submit', (e) => {
-    e.preventDefault();
-    contactFormAwait();
-    
-    let data = new FormData();
-    data.append('email', document.querySelector('#contact form #email').value);
-    data.append('message', document.querySelector('#contact form #message').value);
-
-    fetch('/contact.php', {
-        method: 'POST',
-        body: data
-    })
-    .then((response) => {
-        return response.json();
-    })
-    .then((data) => {
-        if(typeof data.alert !== 'undefined') {
-            contactFormDisplayMesssage(data.alert);
-        } else {
-            contactFormDisplayMesssage(null);
-        }
-    })
-    .catch((error) => {
-        contactFormDisplayMesssage(error);
-    });
-});
-
-function contactFormAwait() {
-    if(contactForm.loaderEl.classList.length <= 0) {
-        contactForm.loaderEl.classList.add('active');
-    } else {
-        contactForm.loaderEl.classList.remove('active');
-    }
-}
-
-function contactFormDisplayMesssage(message) {
-    // @todo : display alert message after the form
-    contactFormAwait();
-}
-
-
-
 //----------------------------//
 //        GAME OVERLAY        //
 //----------------------------//
@@ -105,11 +6,14 @@ let cursor,
     balls = [],
     bullets = [],
     asteroids = [],
-    startingAnimation = 90,
     ultimateDelay = 30,
     scoring = 0,
     scoreText = [],
-    gameStarted = true;
+    gameStarted = false,
+    startingAnimation = 90,
+    level = 1,
+    levelAnimation = 180,
+    levelAsteroidsMaxium = 12;
 
 const buttonStart = document.querySelector('#play-start');
 
@@ -138,34 +42,32 @@ function setup() {
         };
     }
 
-    for(let a = 0; a < 8; a++) {
-        
-        let randShape, rand = Math.floor(random(1, 4));
-        
-        if(rand == 1) {
-            randShape = 40;
-        } else if( rand == 2) {
-            randShape = 60;
-        } else if( rand == 3) {
-            randShape = 100;
-        }
-
-        asteroids[a] = {
-            pos: createVector(random(0, width), random(0, height)),
-            vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
-            w: randShape,
-            angle: random(0, TWO_PI),
-            angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
-        };
-    }
-
 }
 
 function draw() {
+	
+	// BREAKPOINT for Mobile Devices
+	if(width < 769) 
+        return;
+        
     clear();
     textFont('Proxima');
 
     if(!gameStarted) {
+        return;
+    }
+
+    // STAGE ANNONCEMENT
+    if(levelAnimation > 1) {
+        fill(255);
+        const levelTextSize = map(levelAnimation, 180, 1, 0, 48);
+        textSize(levelTextSize);
+        textAlign(CENTER);
+        text('LEVEL'+level, width/2, height/2);
+        levelAnimation--;
+        if(levelAnimation <= 1) {
+            asteroidsSpawn();
+        }
         return;
     }
 
@@ -214,10 +116,6 @@ function draw() {
         }
         angle = createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).heading();
 	}
-	
-	// BREAKPOINT for Mobile Devices
-	if(width < 769) 
-		return;
         
     noStroke();
     fill(255);
@@ -309,15 +207,25 @@ function draw() {
         objectNoLimit(asteroids[a]);
     }
 
-    if(frameCount % 240 == 0 && asteroids.length < 22) {
-        let asteroidNewOne = {
-            pos: createVector(random(0, width), random(0, height)),
-            vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
-            w: 100,
-            angle: random(0, TWO_PI),
-            angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
-        };
-        asteroids.push(asteroidNewOne);
+    // ASTEROIDS SPAWN
+    if(frameCount % 240 == 0) {
+        if( asteroids.length > 0) {
+
+            // Fix the asteroids jam if player is inactive
+            if( asteroids.length < levelAsteroidsMaxium) {
+                let asteroidNewOne = {
+                    pos: createVector(random(0, width), random(0, height)),
+                    vel: createVector(randomGaussian(.75,-.75), randomGaussian(.75,-.75)),
+                    w: 100,
+                    angle: random(0, TWO_PI),
+                    angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
+                };
+                asteroids.push(asteroidNewOne);
+            }
+        } else {
+            // LEVEL STAGE UP
+            levelUpStage();
+        }
     }
 
     // SCORING $$$
@@ -325,6 +233,7 @@ function draw() {
     if(startingAnimation <= 1) {
         noStroke();
         fill(255);
+        textAlign(LEFT);
         textSize(28);
         text('€'+scoring, 150, 58);
 
@@ -347,11 +256,12 @@ function draw() {
     }
 }
 
-function mouseClicked() {
-}
 
 window.addEventListener('mousedown', (e) => {
     if(e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
+        if(levelAnimation > 1 || startingAnimation > 1) {
+            return;
+        }
         e.preventDefault();
         cursor.clickedAnimationCount = 45;
     
@@ -386,6 +296,33 @@ function objectNoLimit(object) {
     } else if (object.pos.y > height + object.w) {
         object.pos.y = 0 - object.w;
     }
+}
+
+function asteroidsSpawn() {
+
+    const asteroidsLenght = map(level, 1, 3, 1, 5);
+
+    for(let a = 0; a < asteroidsLenght; a++) {
+        
+        let randShape, rand = Math.floor(random(1, 4));
+        
+        if(rand == 1) {
+            randShape = 40;
+        } else if( rand == 2) {
+            randShape = 60;
+        } else if( rand == 3) {
+            randShape = 100;
+        }
+
+        asteroids[a] = {
+            pos: createVector(random(0, width), random(0, height)),
+            vel: createVector(random(.75,-.75), random(.75,-.75)),
+            w: randShape,
+            angle: random(0, TWO_PI),
+            angleVel: random(-QUARTER_PI/30, QUARTER_PI/30)
+        };
+    }
+
 }
 
 function asteroidSubdivise(asteroidBefore) {
@@ -469,4 +406,10 @@ function scoreAddAmout(amout, asteroidPosition) {
             life: amout
         });
     }
+}
+
+function levelUpStage() {
+    level++;
+    levelAnimation = 180;
+    levelAsteroidsMaxium = map(level, 1, 3, 12, 33);
 }
