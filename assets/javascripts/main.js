@@ -4,13 +4,17 @@
 //----------------------------//
 let debug = false,
     cursor,
+    cursorFireSound,
     balls = [],
     bullets = [],
     asteroids = [],
+    asteroidSpawnSound,
+    asteroidCrashSound,
     ultimateDelay = 30,
     scoring = 0,
     scoreText = [],
-    gameStarted = true,
+    gameStarted = false,
+    gameResume = false,
     startingAnimation = 90,
     level = 1,
     levelAnimation = 180,
@@ -21,7 +25,15 @@ const buttonStart = document.querySelector('#play-start');
 buttonStart.addEventListener('click', () => {
     gameStarted = true;
     document.querySelector('#home').classList.add('started');
+    soundInit();
 });
+
+function preload() {
+    soundFormats('mp3', 'ogg');
+    cursorFireSound     = loadSound('assets/sounds/lazer-beam');
+    asteroidSpawnSound  = loadSound('assets/sounds/asteroid-spawn');
+    asteroidCrashSound  = loadSound('assets/sounds/asteroid-explode');
+}
 
 function setup() {
     var canvas = createCanvas(innerWidth - 4, innerHeight);
@@ -47,7 +59,7 @@ function setup() {
 
 function draw() {
     clear();
-	
+
 	// BREAKPOINT for Mobile Devices
 	if(width < 769) 
         return;
@@ -145,6 +157,10 @@ function draw() {
         }
         if(cursor.clickedAnimationCount > 0) {
             cursor.clickedAnimationCount--;
+        }
+        if(cursor.clickedAnimationCount >= 44 && typeof cursorFireSound !== 'undefined') {
+            
+            cursorFireSound.play();
         }
 
         if(cursor.pos.dist(createVector(mouseX, mouseY)) > 42) {
@@ -246,13 +262,14 @@ function draw() {
     }
 
     // ASTEROIDS SPAWN
-    if(frameCount % 240 == 0) {
+    if(frameCount % 360 == 0) {
         if( asteroids.length > 0) {
 
             // Fix the asteroids jam if player is inactive
             if( asteroids.length < levelAsteroidsMaxium) {
                 let asteroidNewOne = asteroidCreate(100);
                 asteroids.push(asteroidNewOne);
+                asteroidSpawnSound.play();
             }
         } else {
             // LEVEL STAGE UP
@@ -261,6 +278,12 @@ function draw() {
     }
 
     pop();
+
+    // @todo : finish the remuse state.
+    /*if(gameResume == true) {
+        fill(255,50);
+        rect(0,0,width, height);
+    }*/
 }
 
 window.addEventListener('mousedown', (e) => {
@@ -269,8 +292,9 @@ window.addEventListener('mousedown', (e) => {
             return;
         }
         e.preventDefault();
+        //cursorFireSound.play();
         cursor.clickedAnimationCount = 45;
-    
+            
         bullets.push({
             pos: createVector(cursor.pos.x, cursor.pos.y),
             target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(10)
@@ -284,6 +308,11 @@ window.addEventListener('keydown', (e) => {
         e.preventDefault();
         return false;
     }
+});
+
+window.addEventListener('blur', (e) => {
+    gameResume = true;
+    noLoop();
 });
 
 function windowResized() {
@@ -305,7 +334,7 @@ function objectNoLimit(object) {
 }
 
 function asteroidsSpawn() {
-    const asteroidsLenght = map(level, 1, 3, 1, 5);
+    const asteroidsLenght = map(level, 1, 3, 2, 6);
 
     for(let a = 0; a < asteroidsLenght; a++) {
         let randShape, rand = Math.floor(random(1, 4));
@@ -323,6 +352,8 @@ function asteroidsSpawn() {
 
 function asteroidSubdivise(asteroidBefore) {
     
+    asteroidCrashSound.play();
+
     if(asteroidBefore.w == 30) {
         // pouf
         return;
@@ -337,6 +368,7 @@ function asteroidSubdivise(asteroidBefore) {
 
     asteroids.push(asteroidOne);
     asteroids.push(asteroidTwo);
+
 }
 
 function asteroidCreate(size, origin) {
@@ -349,7 +381,7 @@ function asteroidCreate(size, origin) {
     return {
         pos: position,
         seed: Math.floor(random(1,3)),
-        vel: createVector(random(1,-1), random(1,-1)),
+        vel: createVector(random(1.8,-1.8), random(1.8,-1.8)),
         w: size,
         spawnAnimation: 20,
         angle: random(0, TWO_PI),
@@ -456,4 +488,16 @@ function levelUpStage() {
     levelAnimation = 180;
     levelAsteroidsMaxium = map(level, 1, 3, 8, 25);
     bullets = [];
+}
+
+function soundInit() {
+
+    // CURSOR LAZER SOUND
+    cursorFireSound.amp(0.5);
+    
+    // ASTEROID SPAWN
+    asteroidSpawnSound.amp(1);
+    // ASTEROID CRASH
+    asteroidCrashSound.amp(0.5);
+
 }
