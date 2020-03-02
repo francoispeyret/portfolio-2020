@@ -1,6 +1,8 @@
 header {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
 
     .header-slide {
         flex: 0 0 100%;
@@ -29,8 +31,8 @@ header {
 
     .header-side,
     .header-menu {
-        flex: 0 0 50%;
-        max-width: 50%;
+        flex: 0 0 auto;
+        max-width: none;
         display: flex;
     }
 

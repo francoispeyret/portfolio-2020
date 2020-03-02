@@ -2,9 +2,24 @@
     min-height: 100vh;
     margin: 0 -1.5rem;
     padding: 100px 3rem;
+    .resume-screen,
     .content {
-        transition: ease-in all 0.5s;
+        transition: ease-in all 0.33s;
         //transform: translateY(0);
+    }
+
+    .resume-screen {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+
+        svg {
+            fill: #fff;
+            display: block;
+            height: 64px;
+            width: 64px;
+            margin: 0 auto;
+        }
     }
 
     &.started {
@@ -12,6 +27,16 @@
             transform: translateY(-100%);
             opacity: 0;
             pointer-events: none;
+        }
+    }
+
+    &.resumed {
+        .resume-screen {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        #p5-holder {
+            filter: blur(5px);
         }
     }
 
@@ -23,6 +48,7 @@
         right: 0;
         top: 0;
         bottom: 0;
+        transition: ease-in all 0.33s;
     }
 
     #play-start {

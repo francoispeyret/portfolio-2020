@@ -37,6 +37,11 @@ header {
         opacity: 0.92;
         animation: backgroundAnimation ease-in-out 15s infinite;
         filter: blur(12px);
+        pointer-events: none;
+        
+        @media (max-width: 769px) {
+            display: none;
+        }
     }
     > * {
         position: relative;

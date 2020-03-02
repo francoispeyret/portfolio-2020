@@ -16,6 +16,7 @@ let debug = false,
     gameStarted = false,
     gameResume = false,
     startingAnimation = 90,
+    lifeMax = 5,
     level = 1,
     levelAnimation = 180,
     levelAsteroidsMaxium = 12;
@@ -44,7 +45,9 @@ function setup() {
         w: 15,
         wMax: 15,
         clickedAnimationCount: 45,
-        ultimateAnimationCount: 45
+        ultimateAnimationCount: 45,
+        dammageAnimationCount: 120,
+        life: 3
     };
 
     for(let i = 0; i < 33; i++) {
@@ -71,7 +74,6 @@ function draw() {
         return;
     }
 
-
     // INTERFACE
 
     // SCORING $$$
@@ -80,9 +82,23 @@ function draw() {
     fill(255);
     textAlign(LEFT);
     textSize(28);
-    text('€'+scoring, 25, 120);
+    text('€'+scoring, 25, 140);
     textSize(14);
-    text('LVL'+level, 25, 140);
+    text('LVL'+level, 25, 160);
+    
+    // LIFEs
+    noFill();
+    stroke(255);
+    for(let o = 0; o < lifeMax; o++ ) {
+        if( o < cursor.life) {
+            fill(255);
+        } else {
+            noFill();
+        }
+        rect(25 + (o*15),93,8,18);
+    }
+    stroke(255);
+    noFill();
 
     for(let s = 0; s < scoreText.length; s++) {
         const   amoutFontSize = map(scoreText[s].amout, 40, 100, 14, 22),
@@ -280,14 +296,19 @@ function draw() {
     pop();
 
     // @todo : finish the remuse state.
-    /*if(gameResume == true) {
+    if(gameResume == true) {
         fill(255,50);
         rect(0,0,width, height);
-    }*/
+    }
 }
 
 window.addEventListener('mousedown', (e) => {
-    if(e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
+    if(gameResume == true) {
+        remuseGame();
+        return;
+    }
+    console.log(e.target.id);
+    if(e.target.id === 'header' || e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
         if(levelAnimation > 1 || startingAnimation > 1) {
             return;
         }
@@ -297,7 +318,7 @@ window.addEventListener('mousedown', (e) => {
             
         bullets.push({
             pos: createVector(cursor.pos.x, cursor.pos.y),
-            target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(10)
+            target: createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(12.5)
         });
     }
 });
@@ -311,9 +332,20 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('blur', (e) => {
-    gameResume = true;
-    noLoop();
+    remuseGame();
 });
+
+function remuseGame() {
+    gameResume = !gameResume;
+    document.querySelector('#home').classList.add('resumed');
+    if(gameResume == true) {
+        document.querySelector('#home').classList.add('resumed');
+        noLoop();
+    } else {
+        document.querySelector('#home').classList.remove('resumed');
+        loop();
+    }
+}
 
 function windowResized() {
     resizeCanvas(innerWidth - 4, innerHeight);
