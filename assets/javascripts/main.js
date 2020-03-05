@@ -46,8 +46,8 @@ function setup() {
         wMax: 15,
         clickedAnimationCount: 45,
         ultimateAnimationCount: 45,
-        dammageAnimationCount: 120,
-        life: 3
+        dammageAnimationCount: 0,
+        life: 5
     };
 
     for(let i = 0; i < 33; i++) {
@@ -186,7 +186,8 @@ function draw() {
     }
         
     noStroke();
-    fill(255);
+    const cursorOpacity = map(sin(cursor.dammageAnimationCount/2),0,1,255,55);
+    fill(255, cursorOpacity);
     push();
         translate(cursor.pos.x, cursor.pos.y);
         rotate(angle);
@@ -229,37 +230,22 @@ function draw() {
         
     }
 
-    // BULLETS
-    
-    fill(255);
-    noStroke();
-    for(let b = 0; b < bullets.length; b++) {
-        rect(bullets[b].pos.x, bullets[b].pos.y, 6, 6);
-        bullets[b].pos.add(bullets[b].target);
-        if(
-            bullets[b].pos.x + 6 < 0 || 
-            bullets[b].pos.x - 6 > width ||
-            bullets[b].pos.y + 6 < 0 ||
-            bullets[b].pos.y - 6 > height
-            ) {
-                bullets.splice(b, 1);
-                b--;
-            }
-
+    // CURSOR - CHECK COLISION
+    if(cursor.dammageAnimationCount < 1) {
         for(let a = 0; a < asteroids.length; a++) {
-            if(typeof bullets[b] != 'undefined') {
-                if(asteroids[a].pos.dist(bullets[b].pos) <= asteroids[a].w / 2) {
-                    asteroidSubdivise(asteroids[a]);
-                    scoreAddAmout(asteroids[a].w, asteroids[a].pos)
-                    asteroids.splice(a, 1);
-                    a--;
-                    bullets.splice(b, 1);
-                    b--;
-                    break;
-                }
+            if(cursor.pos.dist(asteroids[a].pos) < asteroids[a].w / 2) {
+                cursor.life--;
+                cursor.dammageAnimationCount = 180;
+                asteroidSubdivise(asteroids[a]);
+                asteroids.splice(a, 1);
+                a--;
+                break;
             }
         }
+    } else {
+        cursor.dammageAnimationCount--;
     }
+
 
     // ASTEROIDS
     for(let a = 0; a < asteroids.length; a++) {
@@ -293,6 +279,38 @@ function draw() {
         }
     }
 
+    // BULLETS
+    
+    fill(255);
+    noStroke();
+    for(let b = 0; b < bullets.length; b++) {
+        rect(bullets[b].pos.x, bullets[b].pos.y, 6, 6);
+        bullets[b].pos.add(bullets[b].target);
+        if(
+            bullets[b].pos.x + 6 < 0 || 
+            bullets[b].pos.x - 6 > width ||
+            bullets[b].pos.y + 6 < 0 ||
+            bullets[b].pos.y - 6 > height
+            ) {
+                bullets.splice(b, 1);
+                b--;
+            }
+
+        for(let a = 0; a < asteroids.length; a++) {
+            if(typeof bullets[b] != 'undefined') {
+                if(asteroids[a].pos.dist(bullets[b].pos) <= asteroids[a].w / 2) {
+                    asteroidSubdivise(asteroids[a]);
+                    scoreAddAmout(asteroids[a].w, asteroids[a].pos);
+                    asteroids.splice(a, 1);
+                    a--;
+                    bullets.splice(b, 1);
+                    b--;
+                    break;
+                }
+            }
+        }
+    }
+
     pop();
 
     // @todo : finish the remuse state.
@@ -307,7 +325,9 @@ window.addEventListener('mousedown', (e) => {
         remuseGame();
         return;
     }
-    console.log(e.target.id);
+    if(cursor.dammageAnimationCount > 1) {
+        return;
+    }
     if(e.target.id === 'header' || e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
         if(levelAnimation > 1 || startingAnimation > 1) {
             return;
