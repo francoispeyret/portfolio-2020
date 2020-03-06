@@ -1,5 +1,3 @@
-
-
 //----------------------------//
 //        CONTACT FORM        //
 //----------------------------//
@@ -12,7 +10,7 @@ let contactForm = {
 contactForm.el.addEventListener('submit', (e) => {
     e.preventDefault();
     contactFormAwait();
-    
+
     let data = new FormData();
     data.append('email', document.querySelector('#contact form #email').value);
     data.append('message', document.querySelector('#contact form #message').value);
@@ -21,23 +19,23 @@ contactForm.el.addEventListener('submit', (e) => {
         method: 'POST',
         body: data
     })
-    .then((response) => {
-        return response.json();
-    })
-    .then((data) => {
-        if(typeof data.alert !== 'undefined') {
-            contactFormDisplayMesssage(data.alert);
-        } else {
-            contactFormDisplayMesssage(null);
-        }
-    })
-    .catch((error) => {
-        contactFormDisplayMesssage(error);
-    });
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if (typeof data.alert !== 'undefined') {
+                contactFormDisplayMesssage(data.alert);
+            } else {
+                contactFormDisplayMesssage(null);
+            }
+        })
+        .catch((error) => {
+            contactFormDisplayMesssage(error);
+        });
 });
 
 function contactFormAwait() {
-    if(contactForm.loaderEl.classList.length <= 0) {
+    if (contactForm.loaderEl.classList.length <= 0) {
         contactForm.loaderEl.classList.add('active');
     } else {
         contactForm.loaderEl.classList.remove('active');
