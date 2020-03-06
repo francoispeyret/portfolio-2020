@@ -31,6 +31,7 @@ buttonStart.addEventListener('click', () => {
 function preload() {
     soundFormats('mp3', 'ogg');
     cursorFireSound = loadSound('assets/sounds/lazer-beam');
+    cursorDamageSound = loadSound('assets/sounds/cursor-damage');
     asteroidSpawnSound = loadSound('assets/sounds/asteroid-spawn');
     asteroidCrashSound = loadSound('assets/sounds/asteroid-explode');
 }
@@ -157,7 +158,8 @@ function draw() {
         for (let a = 0; a < asteroids.length; a++) {
             if (cursor.pos.dist(asteroids[a].pos) < asteroids[a].w / 2) {
                 cursor.life--;
-                cursor.dammageAnimationCount = 180;
+                cursor.dammageAnimationCount = 90;
+                cursorDamageSound.play();
                 asteroidSubdivise(asteroids[a]);
                 asteroids.splice(a, 1);
                 a--;
@@ -255,7 +257,7 @@ window.addEventListener('mousedown', (e) => {
             return;
         }
         e.preventDefault();
-        //cursorFireSound.play();
+        cursorFireSound.play();
         cursor.clickedAnimationCount = 45;
 
         bullets.push({
@@ -468,6 +470,8 @@ function soundInit() {
 
     // CURSOR LAZER SOUND
     cursorFireSound.amp(0.5);
+    // CURSOR DAMAGE
+    cursorDamageSound.amp(0.33);
 
     // ASTEROID SPAWN
     asteroidSpawnSound.amp(1);
