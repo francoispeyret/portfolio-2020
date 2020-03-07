@@ -20,9 +20,7 @@ let debug = false,
     levelAnimation = 180,
     levelAsteroidsMaxium = 12;
 
-const buttonStart = document.querySelector('#play-start');
-
-buttonStart.addEventListener('click', () => {
+document.querySelector('#play-start').addEventListener('click', () => {
     gameStarted = true;
     document.querySelector('#home').classList.add('started');
     soundInit();
@@ -344,86 +342,6 @@ function asteroidCreate(size, origin) {
     return new Asteroid(size, position);
 }
 
-function asteroidShape(size, seed, spawnAnimation) {
-    if (debug) {
-        noFill();
-        stroke(255, 0, 0);
-        strokeWeight(1);
-        circle(0, 0, size, size);
-    }
-    const alpha = map(spawnAnimation, 20, 1, 0, 255);
-    stroke(255, alpha);
-    strokeWeight(2);
-    noFill();
-
-    push();
-    beginShape();
-    translate(-size / 2, -size / 2);
-    if (size == 30) {
-        if (seed == 1) {
-            vertex(4, 7);
-            vertex(20, 5);
-            vertex(23, 15);
-            vertex(15, 25);
-            vertex(5, 20);
-        } else if (seed == 2) {
-            vertex(0, 7);
-            vertex(6, 2);
-            vertex(20, 5);
-            vertex(23, 15);
-            vertex(18, 18);
-            vertex(12, 22);
-            vertex(5, 20);
-        }
-    } else if (size == 50) {
-        if (seed == 1) {
-            vertex(8, 10);
-            vertex(22, 13);
-            vertex(40, 9);
-            vertex(50, 15);
-            vertex(40, 25);
-            vertex(45, 35);
-            vertex(45, 45);
-            vertex(30, 45);
-            vertex(16, 40);
-            vertex(5, 25);
-        } else if (seed == 2) {
-            vertex(8, 7);
-            vertex(20, 5);
-            vertex(40, 9);
-            vertex(50, 25);
-            vertex(45, 45);
-            vertex(30, 35);
-            vertex(16, 40);
-            vertex(5, 25);
-        }
-    } else if (size == 100) {
-        if (seed == 1) {
-            vertex(22, 7);
-            vertex(40, 12);
-            vertex(60, 9);
-            vertex(75, 35);
-            vertex(65, 65);
-            vertex(40, 80);
-            vertex(20, 80);
-            vertex(14, 60);
-            vertex(16, 40);
-            vertex(10, 19);
-        } else if (seed == 2) {
-            vertex(60, 9);
-            vertex(75, 35);
-            vertex(80, 75);
-            vertex(55, 70);
-            vertex(40, 75);
-            vertex(14, 60);
-            vertex(16, 40);
-            vertex(22, 5);
-        }
-    }
-    endShape(CLOSE);
-    pop();
-}
-
 function scoreAddAmout(amout, asteroidPosition) {
     if (amout > 0) {
         scoring += amout;
@@ -449,7 +367,6 @@ function soundInit() {
     cursorFireSound.amp(0.5);
     // CURSOR DAMAGE
     cursorDamageSound.amp(0.33);
-
     // ASTEROID SPAWN
     asteroidSpawnSound.amp(1);
     // ASTEROID CRASH
