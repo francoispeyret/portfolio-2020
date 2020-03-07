@@ -173,18 +173,8 @@ function draw() {
 
     // ASTEROIDS
     for (let a = 0; a < asteroids.length; a++) {
-        asteroids[a].angle += asteroids[a].angleVel;
-        push();
-        translate(asteroids[a].pos.x, asteroids[a].pos.y);
-        rotate(asteroids[a].angle);
-        asteroidShape(asteroids[a].w, asteroids[a].seed, asteroids[a].spawnAnimation);
-        pop();
-
-        if (asteroids[a].spawnAnimation > 1)
-            asteroids[a].spawnAnimation--;
-        asteroids[a].pos.add(asteroids[a].vel);
-
-        objectNoLimit(asteroids[a]);
+        asteroids[a].update();
+        asteroids[a].show();
     }
 
     // ASTEROIDS SPAWN
@@ -237,7 +227,6 @@ function draw() {
 
     pop();
 
-    // @todo : finish the remuse state.
     if (gameResume == true) {
         fill(255, 50);
         rect(0, 0, width, height);
@@ -311,7 +300,6 @@ function objectNoLimit(object) {
 
 function asteroidsSpawn() {
     const asteroidsLenght = map(level, 1, 3, 2, 6);
-
     for (let a = 0; a < asteroidsLenght; a++) {
         let randShape, rand = Math.floor(random(1, 4));
 
@@ -327,9 +315,7 @@ function asteroidsSpawn() {
 }
 
 function asteroidSubdivise(asteroidBefore) {
-
-    asteroidCrashSound.play();
-
+    let randShape;
     if (asteroidBefore.w == 30) {
         // pouf
         return;
@@ -345,6 +331,7 @@ function asteroidSubdivise(asteroidBefore) {
     asteroids.push(asteroidOne);
     asteroids.push(asteroidTwo);
 
+    asteroidCrashSound.play();
 }
 
 function asteroidCreate(size, origin) {
@@ -354,15 +341,7 @@ function asteroidCreate(size, origin) {
     } else {
         position = createVector(random(0, width), random(0, height));
     }
-    return {
-        pos: position,
-        seed: Math.floor(random(1, 3)),
-        vel: createVector(random(1.8, -1.8), random(1.8, -1.8)),
-        w: size,
-        spawnAnimation: 20,
-        angle: random(0, TWO_PI),
-        angleVel: random(-QUARTER_PI / 30, QUARTER_PI / 30)
-    };
+    return new Asteroid(size, position);
 }
 
 function asteroidShape(size, seed, spawnAnimation) {
@@ -376,10 +355,9 @@ function asteroidShape(size, seed, spawnAnimation) {
     stroke(255, alpha);
     strokeWeight(2);
     noFill();
-    beginShape();
-
 
     push();
+    beginShape();
     translate(-size / 2, -size / 2);
     if (size == 30) {
         if (seed == 1) {
@@ -467,7 +445,6 @@ function levelUpStage() {
 }
 
 function soundInit() {
-
     // CURSOR LAZER SOUND
     cursorFireSound.amp(0.5);
     // CURSOR DAMAGE
@@ -477,5 +454,4 @@ function soundInit() {
     asteroidSpawnSound.amp(1);
     // ASTEROID CRASH
     asteroidCrashSound.amp(0.5);
-
 }
