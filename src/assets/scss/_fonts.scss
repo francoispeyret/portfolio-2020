@@ -1,13 +1,12 @@
-/*@font-face {
+@font-face {
     font-family: 'Proxima';
-    src: url('@/fonts/proxima_nova_regular.woff2') format('woff2'),
-        url('@/fonts/proxima_nova_regular.woff') format('woff');
+    src: url('../fonts/proxima_nova_regular.woff2') format('woff2'),
+        url('../fonts/proxima_nova_regular.woff') format('woff');
     font-weight: 400;
 }
 @font-face {
     font-family: 'Proxima';
-    src: url('@/fonts/proxima_nova_extrabold.woff2') format('woff2'),
-        url('@/fonts/proxima_nova_extrabold.woff') format('woff');
+    src: url('../fonts/proxima_nova_extrabold.woff2') format('woff2'),
+        url('../fonts/proxima_nova_extrabold.ttf') format('ttf');
     font-weight: 800;
 }
-*/

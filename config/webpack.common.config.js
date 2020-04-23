@@ -5,7 +5,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: './src/index',
+    entry: {
+        index:'./src/index'
+    },
     output: {
         path: path.resolve(__dirname, '../dist'),
         filename: '[name].[chunkhash].js'
@@ -35,13 +37,13 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(png|jpg|jpeg|gif|svg)$/,
+                test: /\.(png|jpg|jpeg|gif|svg|woff2|woff|ttf)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            outputPath: 'assets/images/'
+                            outputPath: 'assets/'
                         }
                     }
                 ]
@@ -64,7 +66,7 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'WebDeveloper - François Peyret',
+            title: 'François Peyret - WebDeveloper',
             template: './src/index.html',
             inject: true,
             minify: {
@@ -78,6 +80,14 @@ module.exports = {
         new CopyWebpackPlugin([{
             from: './src/assets/images',
             to: 'assets/images'
+        }]),
+        new CopyWebpackPlugin([{
+            from: './src/assets/sounds',
+            to: 'assets/sounds'
+        }]),
+        new CopyWebpackPlugin([{
+            from: './src/assets/fonts',
+            to: 'assets/fonts'
         }]),
         new CleanWebpackPlugin()
     ]

@@ -1,7 +1,10 @@
-import * as p5 from "./p5.min.js";
+import * as p5 from "p5";
+import * as p5moduleSound from  "p5/lib/addons/p5.sound";
 
 import Cursor from "./classes/cursor";
 import Asteroid from "./classes/asteroid";
+import Ball from "./classes/ball";
+import Explosion from "./classes/explosion";
 
 let s = (_) => {
     //----------------------------//
@@ -10,11 +13,13 @@ let s = (_) => {
     let debug = false,
         cursor,
         cursorFireSound,
-        balls = [],
-        bullets = [],
-        asteroids = [],
+        balls      = [],
+        bullets    = [],
+        explosions = [],
+        asteroids  = [],
         asteroidSpawnSound,
         asteroidCrashSound,
+        cursorDamageSound,
         ultimateDelay = 30,
         scoring = 0,
         scoreText = [],
@@ -29,16 +34,16 @@ let s = (_) => {
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
         document.querySelector('#home').classList.add('started');
-        //soundInit();
+        soundInit();
     });
 
     _.preload = () => {
-        /*_.soundFormats('mp3', 'ogg');
-        cursorFireSound = loadSound('assets/sounds/lazer-beam');
-        cursorDamageSound = loadSound('assets/sounds/cursor-damage');
-        asteroidSpawnSound = loadSound('assets/sounds/asteroid-spawn');
-        asteroidCrashSound = loadSound('assets/sounds/asteroid-explode');*/
-    }
+        _.soundFormats('mp3', 'ogg');
+        cursorFireSound = _.loadSound('/assets/sounds/lazer-beam.mp3');
+        cursorDamageSound = _.loadSound('/assets/sounds/cursor-damage.mp3');
+        asteroidSpawnSound = _.loadSound('/assets/sounds/asteroid-spawn.mp3');
+        asteroidCrashSound = _.loadSound('/assets/sounds/asteroid-explode.mp3');
+    };
 
     _.setup = () => {
         let canvas = _.createCanvas(innerWidth - 4, innerHeight);
@@ -47,14 +52,10 @@ let s = (_) => {
         cursor = new Cursor(_);
 
         for (let i = 0; i < 33; i++) {
-            balls[i] = {
-                pos: _.createVector(_.random(0, _.width), _.random(0, _.height)),
-                w: Math.floor(_.random(2, 12)),
-                vel: _.createVector(_.randomGaussian(.75, -.75), _.randomGaussian(.75, -.75))
-            };
+            balls[i] = new Ball(_);
         }
 
-    }
+    };
 
     _.draw = () => {
         _.clear();
@@ -71,107 +72,113 @@ let s = (_) => {
         }
 
         // INTERFACE
+        if(cursor.life > 0) {
 
-        // SCORING $$$
+            // SCORING $$$
 
-        _.noStroke();
-        _.fill(255);
-        _.textAlign(_.LEFT);
-        _.textSize(28);
-        _.text('€' + scoring, 25, 140);
-        _.textSize(14);
-        _.text('LVL' + level, 25, 160);
-
-        // LIFEs
-        _.noFill();
-        _.stroke(255);
-        for (let o = 0; o < lifeMax; o++) {
-            if (o < cursor.life) {
-                _.fill(255);
-            } else {
-                _.noFill();
-            }
-            _.rect(25 + (o * 15), 93, 8, 18);
-        }
-        _.stroke(255);
-        _.noFill();
-
-        for (let s = 0; s < scoreText.length; s++) {
-            const amoutFontSize = _.map(scoreText[s].amout, 40, 100, 14, 22),
-                amoutOpacity = _.map(scoreText[s].life, 100, 0, 255, 150);
-
-            _.fill(255, amoutOpacity);
-            _.textSize(amoutFontSize);
-            _.text('+' + scoreText[s].amout, scoreText[s].pos.x, scoreText[s].pos.y);
-            scoreText[s].pos.add(_.createVector(0, -0.5));
-
-            scoreText[s].life--;
-            if (scoreText[s].life <= 0) {
-                scoreText.splice(s, 1);
-                s--;
-            }
-        }
-
-        // \\ INTERFACE
-        // STAGE ANNONCEMENT
-        if (levelAnimation > 1) {
+            _.noStroke();
             _.fill(255);
-            const levelTextSize = _.map(levelAnimation, 180, 1, 0, 48);
-            _.textSize(levelTextSize);
-            _.textAlign(_.CENTER);
-            _.text('LEVEL' + level, _.width / 2, _.height / 2);
-            levelAnimation--;
-            if (levelAnimation <= 1) {
-                asteroidsSpawn();
+            _.textAlign(_.LEFT);
+            _.textSize(28);
+            _.text('€' + scoring, 25, 140);
+            _.textSize(14);
+            _.text('LVL' + level, 25, 160);
+
+            // LIFEs
+            _.noFill();
+            _.stroke(255);
+            for (let o = 0; o < lifeMax; o++) {
+                if (o < cursor.life) {
+                    _.fill(255);
+                } else {
+                    _.noFill();
+                }
+                _.rect(25 + (o * 15), 93, 8, 18);
             }
-            return;
+            _.stroke(255);
+            _.noFill();
+
+            for (let s = 0; s < scoreText.length; s++) {
+                const amoutFontSize = _.map(scoreText[s].amout, 40, 100, 14, 22),
+                      amoutOpacity = _.map(scoreText[s].life, 100, 0, 255, 150);
+
+                _.fill(255, amoutOpacity);
+                _.textSize(amoutFontSize);
+                _.text('+' + scoreText[s].amout, scoreText[s].pos.x, scoreText[s].pos.y);
+                scoreText[s].pos.add(_.createVector(0, -0.5));
+
+                scoreText[s].life--;
+                if (scoreText[s].life <= 0) {
+                    scoreText.splice(s, 1);
+                    s--;
+                }
+            }
+
+            // \\ INTERFACE
+            // STAGE ANNONCEMENT
+            if (levelAnimation > 1) {
+                _.fill(255);
+                const levelTextSize = _.map(levelAnimation, 180, 1, 0, 48);
+                _.textSize(levelTextSize);
+                _.textAlign(_.CENTER);
+                _.text('LEVEL' + level, _.width / 2, _.height / 2);
+                levelAnimation--;
+                if (levelAnimation <= 1) {
+                    asteroidsSpawn();
+                }
+                return;
+            }
+
+
         }
-
-
-        // animation scaling
         _.push();
+        if(cursor.life > 0) {
+            // animation scaling
 
-        if (startingAnimation > 1) {
-            startingAnimation--;
-            const scalingAnimation = _.map(startingAnimation, 90, 1, 0, 1),
-                translateAnimationX = _.map(startingAnimation, 90, 1, _.width / 2, 0),
-                translateAnimationY = _.map(startingAnimation, 90, 1, _.height / 2, 0);
+            if (startingAnimation > 1) {
+                startingAnimation--;
+                const scalingAnimation = _.map(startingAnimation, 90, 1, 0, 1),
+                    translateAnimationX = _.map(startingAnimation, 90, 1, _.width / 2, 0),
+                    translateAnimationY = _.map(startingAnimation, 90, 1, _.height / 2, 0);
 
-            _.translate(translateAnimationX, translateAnimationY);
-            _.scale(scalingAnimation, scalingAnimation);
+                _.translate(translateAnimationX, translateAnimationY);
+                _.scale(scalingAnimation, scalingAnimation);
+            }
         }
 
 
         // BALLS
         for (let i = 0; i < balls.length; i++) {
-            _.stroke(255, _.map(balls[i].w, 2, 16, 15, 70));
-            _.strokeWeight(balls[i].w);
-            _.point(balls[i].pos.x, balls[i].pos.y);
-
-            balls[i].pos.add(balls[i].vel);
-
-            objectNoLimit(balls[i]);
+            balls[i].show();
+            balls[i].update();
         }
         _.noFill();
 
         // CURSOR
         cursor.show();
 
-        // CURSOR - CHECK COLISION
-        if (cursor.dammageAnimationCount < 1) {
-            for (let a = 0; a < asteroids.length; a++) {
-                if (cursor.pos.dist(asteroids[a].pos) < asteroids[a].w / 2) {
-                    cursor.life--;
-                    cursor.dammageAnimationCount = 90;
-                    //cursorDamageSound.play();
-                    asteroidSubdivise(asteroids[a]);
-                    asteroids.splice(a, 1);
-                    a--;
-                    break;
+        if(cursor.life > 0) {
+            // CURSOR - CHECK COLISION
+            if (cursor.dammageAnimationCount < 1) {
+                for (let a = 0; a < asteroids.length; a++) {
+                    if (cursor.pos.dist(asteroids[a].pos) < asteroids[a].w / 2) {
+                        cursor.life--;
+                        cursor.dammageAnimationCount = 90;
+                        cursorDamageSound.play();
+                        asteroidSubdivise(asteroids[a]);
+                        asteroids.splice(a, 1);
+                        a--;
+                        break;
+                    }
                 }
+            } else {
+                cursor.dammageAnimationCount--;
             }
         } else {
-            cursor.dammageAnimationCount--;
+            if (_.frameCount % 20 === 0 && asteroids.length) {
+                asteroidSubdivise(asteroids[0]);
+                asteroids.splice(0, 1);
+            }
         }
 
 
@@ -182,18 +189,20 @@ let s = (_) => {
         }
 
         // ASTEROIDS SPAWN
-        if (frameCount % 360 == 0) {
-            if (asteroids.length > 0) {
+        if(cursor.life > 0) {
+            if (_.frameCount % 360 === 0) {
+                if (asteroids.length > 0) {
 
-                // Fix the asteroids jam if player is inactive
-                if (asteroids.length < levelAsteroidsMaxium) {
-                    let asteroidNewOne = asteroidCreate(100);
-                    asteroids.push(asteroidNewOne);
-                    //asteroidSpawnSound.play();
+                    // Fix the asteroids jam if player is inactive
+                    if (asteroids.length < levelAsteroidsMaxium) {
+                        let asteroidNewOne = asteroidCreate(100);
+                        asteroids.push(asteroidNewOne);
+                        asteroidSpawnSound.play();
+                    }
+                } else {
+                    // LEVEL STAGE UP
+                    levelUpStage();
                 }
-            } else {
-                // LEVEL STAGE UP
-                levelUpStage();
             }
         }
 
@@ -206,16 +215,16 @@ let s = (_) => {
             bullets[b].pos.add(bullets[b].target);
             if (
                 bullets[b].pos.x + 6 < 0 ||
-                bullets[b].pos.x - 6 > width ||
+                bullets[b].pos.x - 6 > _.width ||
                 bullets[b].pos.y + 6 < 0 ||
-                bullets[b].pos.y - 6 > height
+                bullets[b].pos.y - 6 > _.height
             ) {
                 bullets.splice(b, 1);
                 b--;
             }
 
             for (let a = 0; a < asteroids.length; a++) {
-                if (typeof bullets[b] != 'undefined') {
+                if (typeof bullets[b] !== 'undefined') {
                     if (asteroids[a].pos.dist(bullets[b].pos) <= asteroids[a].w / 2) {
                         asteroidSubdivise(asteroids[a]);
                         scoreAddAmout(asteroids[a].w, asteroids[a].pos);
@@ -229,16 +238,26 @@ let s = (_) => {
             }
         }
 
+
+        // EXPLOSIONS
+        for (let i = 0; i < explosions.length; i++) {
+            explosions[i].show();
+            explosions[i].update();
+            if(explosions[i].lifeAnimation < -100) {
+                explosions.splice(i, 1);
+            }
+        }
+
         _.pop();
 
-        if (gameResume == true) {
+        if (gameResume === true) {
             _.fill(255, 50);
-            _.rect(0, 0, width, height);
+            _.rect(0, 0, _.width, _.height);
         }
-    }
+    };
 
-    window.addEventListener('mousedown', (e) => {/*
-        if (gameResume == true) {
+    window.addEventListener('mousedown', (e) => {
+        if (gameResume === true) {
             remuseGame();
             return;
         }
@@ -255,13 +274,13 @@ let s = (_) => {
 
             bullets.push({
                 pos: _.createVector(cursor.pos.x, cursor.pos.y),
-                target: _.createVector(mouseX - cursor.pos.x, mouseY - cursor.pos.y).limit(12.5)
+                target: _.createVector(_.mouseX - cursor.pos.x, _.mouseY - cursor.pos.y).limit(12.5)
             });
-        }*/
+        }
     });
 
     window.addEventListener('keydown', (e) => {
-        if (e.keyCode == 17) {
+        if (e.keyCode === 17) {
             ultimateDelay = true;
             e.preventDefault();
             return false;
@@ -275,43 +294,31 @@ let s = (_) => {
     function remuseGame() {
         gameResume = !gameResume;
         document.querySelector('#home').classList.add('resumed');
-        if (gameResume == true) {
+        if (gameResume === true) {
             document.querySelector('#home').classList.add('resumed');
             _.noLoop();
         } else {
             document.querySelector('#home').classList.remove('resumed');
             _.loop();
         }
+        _.resizeCanvas(window.innerWidth - 4, window.innerHeight)
     }
 
-    function windowResized() {
-        resizeCanvas(innerWidth - 4, innerHeight);
-    }
+    window.addEventListener('resize',
+        _.resizeCanvas(window.innerWidth - 4, window.innerHeight)
+    );
 
-    function objectNoLimit(object) {
-        if (object.pos.x < 0 - object.w) {
-            object.pos.x = _.width + object.w;
-        } else if (object.pos.x > _.width + object.w) {
-            object.pos.x = 0 - object.w;
-        }
-
-        if (object.pos.y < 0 - object.w) {
-            object.pos.y = _.height + object.w;
-        } else if (object.pos.y > _.height + object.w) {
-            object.pos.y = 0 - object.w;
-        }
-    }
 
     function asteroidsSpawn() {
         const asteroidsLenght = _.map(level, 1, 3, 2, 6);
         for (let a = 0; a < asteroidsLenght; a++) {
             let randShape, rand = Math.floor(_.random(1, 4));
 
-            if (rand == 1) {
+            if (rand === 1) {
                 randShape = 30;
-            } else if (rand == 2) {
+            } else if (rand === 2) {
                 randShape = 50;
-            } else if (rand == 3) {
+            } else if (rand === 3) {
                 randShape = 100;
             }
             asteroids.push(asteroidCreate(randShape));
@@ -319,13 +326,16 @@ let s = (_) => {
     }
 
     function asteroidSubdivise(asteroidBefore) {
+        explosions.push(new Explosion(_,asteroidBefore.pos,asteroidBefore.w));
+        asteroidCrashSound.play();
+
         let randShape;
-        if (asteroidBefore.w == 30) {
+        if (asteroidBefore.w === 30) {
             // pouf
             return;
-        } else if (asteroidBefore.w == 50) {
+        } else if (asteroidBefore.w === 50) {
             randShape = 30;
-        } else if (asteroidBefore.w == 100) {
+        } else if (asteroidBefore.w === 100) {
             randShape = 50;
         }
 
@@ -335,7 +345,6 @@ let s = (_) => {
         asteroids.push(asteroidOne);
         asteroids.push(asteroidTwo);
 
-        asteroidCrashSound.play();
     }
 
     function asteroidCreate(size, origin) {
@@ -351,10 +360,10 @@ let s = (_) => {
     function scoreAddAmout(amout, asteroidPosition) {
         if (amout > 0) {
             scoring += amout;
-            let scoreTextPös = _.createVector(asteroidPosition.x, asteroidPosition.y);
-            scoreTextPös.add(_.createVector(_.random(-40, 40), _.random(40, -40)))
+            let scoreTextPos = _.createVector(asteroidPosition.x, asteroidPosition.y);
+            scoreTextPos.add(_.createVector(_.random(-40, 40), _.random(40, -40)))
             scoreText.push({
-                pos: scoreTextPös,
+                pos: scoreTextPos,
                 amout: amout,
                 life: amout
             });
@@ -378,5 +387,5 @@ let s = (_) => {
         // ASTEROID CRASH
         asteroidCrashSound.amp(0.5);
     }
-}
+};
 const P5 = new p5(s);

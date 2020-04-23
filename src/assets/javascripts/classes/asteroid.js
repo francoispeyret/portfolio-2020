@@ -1,3 +1,6 @@
+
+import objectNoLimit from "../common/utils";
+
 class Asteroid {
     constructor(_, size, position) {
         this._ = _;
@@ -29,17 +32,17 @@ class Asteroid {
     }
 
     asteroidShape() {
-        if (debug) {
+        /*if (debug) {
             this._.noFill();
             this._.stroke(255, 0, 0);
             this._.strokeWeight(1);
             this._.circle(0, 0, this.w, this.w);
-        }
+        }*/
         const alpha = this._.map(this.spawnAnimation, 20, 1, 0, 255);
         this._.stroke(255, alpha);
         this._.strokeWeight(2);
         this._.noFill();
-    
+
         this._.push();
         this._.beginShape();
         this._.translate(-this.w / 2, -this.w / 2);
@@ -104,7 +107,7 @@ class Asteroid {
                 this._.vertex(22, 5);
             }
         }
-        this._.endShape(CLOSE);
+        this._.endShape(this._.CLOSE);
         this._.pop();
     }
 }

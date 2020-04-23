@@ -49,5 +49,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "dependencies": {
+    "p5": "0.9.0"
+  }
 }

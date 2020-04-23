@@ -7,13 +7,13 @@ class Cursor {
         this.clickedAnimationCount = 45;
         this.ultimateAnimationCount = 45;
         this.dammageAnimationCount = 0;
-        this.life = 5
+        this.life = 1
     }
 
     show() {
         let angle = this._.createVector(this._.width / 2, 0).heading();
         if (this._.mouseX !== 0 || this._.mouseY !== 0) {
-            let vel = this._.createVector(this.mouseX - this.pos.x, this.mouseY - this.pos.y).div(100);
+            let vel = this._.createVector(this._.mouseX - this.pos.x, this._.mouseY - this.pos.y).div(100);
             const mag = (vel.mag() / 6).toFixed(1);
 
             if (this.w - mag > 5) {
