@@ -66,10 +66,11 @@ header {
             }
             
             &.sound {
+                cursor: pointer;
                 svg {
                     margin: 0.95rem 0;
-                    height: 25px;
-                    width: 25px;
+                    height: 26px;
+                    width: 26px;
                     fill: #fff;
                     display: block;
                     &.on {

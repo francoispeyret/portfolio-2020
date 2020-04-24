@@ -37,6 +37,8 @@ let s = (_) => {
         document.querySelector('#home').classList.add('started');
         if(sound)
             soundInit();
+        else
+            soundMute();
     });
 
     document.querySelector('.sound').addEventListener('click', () => {
