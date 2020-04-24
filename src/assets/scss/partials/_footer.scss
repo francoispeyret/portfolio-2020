@@ -49,6 +49,9 @@ footer {
             display: inline-block;
             margin-right: 2rem;
             letter-spacing: 0.2em;
+            a {
+                font-weight: 700;
+            }
             @media (max-width: 769px) {
                 margin: 0 .5rem;
                 a {

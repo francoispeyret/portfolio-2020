@@ -29,7 +29,7 @@ let s = (_) => {
         lifeMax = 5,
         level = 1,
         levelAnimation = 180,
-        levelAsteroidsMaxium = 12;
+        levelAsteroidsMaximum = 12;
 
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
@@ -39,8 +39,8 @@ let s = (_) => {
 
     _.preload = () => {
         _.soundFormats('mp3', 'ogg');
-        cursorFireSound = _.loadSound('/assets/sounds/lazer-beam.mp3');
-        cursorDamageSound = _.loadSound('/assets/sounds/cursor-damage.mp3');
+        cursorFireSound    = _.loadSound('/assets/sounds/laser-beam.mp3');
+        cursorDamageSound  = _.loadSound('/assets/sounds/cursor-damage.mp3');
         asteroidSpawnSound = _.loadSound('/assets/sounds/asteroid-spawn.mp3');
         asteroidCrashSound = _.loadSound('/assets/sounds/asteroid-explode.mp3');
     };
@@ -99,12 +99,12 @@ let s = (_) => {
             _.noFill();
 
             for (let s = 0; s < scoreText.length; s++) {
-                const amoutFontSize = _.map(scoreText[s].amout, 40, 100, 14, 22),
+                const amoutFontSize = _.map(scoreText[s].amount, 40, 100, 14, 22),
                       amoutOpacity = _.map(scoreText[s].life, 100, 0, 255, 150);
 
                 _.fill(255, amoutOpacity);
                 _.textSize(amoutFontSize);
-                _.text('+' + scoreText[s].amout, scoreText[s].pos.x, scoreText[s].pos.y);
+                _.text('+' + scoreText[s].amount, scoreText[s].pos.x, scoreText[s].pos.y);
                 scoreText[s].pos.add(_.createVector(0, -0.5));
 
                 scoreText[s].life--;
@@ -165,7 +165,7 @@ let s = (_) => {
                         cursor.life--;
                         cursor.dammageAnimationCount = 90;
                         cursorDamageSound.play();
-                        asteroidSubdivise(asteroids[a]);
+                        asteroidSubdivide(asteroids[a]);
                         asteroids.splice(a, 1);
                         a--;
                         break;
@@ -176,7 +176,7 @@ let s = (_) => {
             }
         } else {
             if (_.frameCount % 20 === 0 && asteroids.length) {
-                asteroidSubdivise(asteroids[0]);
+                asteroidSubdivide(asteroids[0]);
                 asteroids.splice(0, 1);
             }
         }
@@ -194,7 +194,7 @@ let s = (_) => {
                 if (asteroids.length > 0) {
 
                     // Fix the asteroids jam if player is inactive
-                    if (asteroids.length < levelAsteroidsMaxium) {
+                    if (asteroids.length < levelAsteroidsMaximum) {
                         let asteroidNewOne = asteroidCreate(100);
                         asteroids.push(asteroidNewOne);
                         asteroidSpawnSound.play();
@@ -226,8 +226,8 @@ let s = (_) => {
             for (let a = 0; a < asteroids.length; a++) {
                 if (typeof bullets[b] !== 'undefined') {
                     if (asteroids[a].pos.dist(bullets[b].pos) <= asteroids[a].w / 2) {
-                        asteroidSubdivise(asteroids[a]);
-                        scoreAddAmout(asteroids[a].w, asteroids[a].pos);
+                        asteroidSubdivide(asteroids[a]);
+                        scoreAddAmount(asteroids[a].w, asteroids[a].pos);
                         asteroids.splice(a, 1);
                         a--;
                         bullets.splice(b, 1);
@@ -258,7 +258,7 @@ let s = (_) => {
 
     window.addEventListener('mousedown', (e) => {
         if (gameResume === true) {
-            remuseGame();
+            resumeGame();
             return;
         }
         if (cursor.dammageAnimationCount > 1) {
@@ -280,7 +280,7 @@ let s = (_) => {
     });
 
     window.addEventListener('keydown', (e) => {
-        if (e.keyCode === 17) {
+        if (e.key === 17) {
             ultimateDelay = true;
             e.preventDefault();
             return false;
@@ -288,10 +288,10 @@ let s = (_) => {
     });
 
     window.addEventListener('blur', (e) => {
-        remuseGame();
+        resumeGame();
     });
 
-    function remuseGame() {
+    function resumeGame() {
         gameResume = !gameResume;
         document.querySelector('#home').classList.add('resumed');
         if (gameResume === true) {
@@ -310,8 +310,8 @@ let s = (_) => {
 
 
     function asteroidsSpawn() {
-        const asteroidsLenght = _.map(level, 1, 3, 2, 6);
-        for (let a = 0; a < asteroidsLenght; a++) {
+        const asteroidsLength = _.map(level, 1, 3, 2, 6);
+        for (let a = 0; a < asteroidsLength; a++) {
             let randShape, rand = Math.floor(_.random(1, 4));
 
             if (rand === 1) {
@@ -325,7 +325,7 @@ let s = (_) => {
         }
     }
 
-    function asteroidSubdivise(asteroidBefore) {
+    function asteroidSubdivide(asteroidBefore) {
         explosions.push(new Explosion(_,asteroidBefore.pos,asteroidBefore.w));
         asteroidCrashSound.play();
 
@@ -357,15 +357,15 @@ let s = (_) => {
         return new Asteroid(_, size, position);
     }
 
-    function scoreAddAmout(amout, asteroidPosition) {
-        if (amout > 0) {
-            scoring += amout;
+    function scoreAddAmount(amount, asteroidPosition) {
+        if (amount > 0) {
+            scoring += amount;
             let scoreTextPos = _.createVector(asteroidPosition.x, asteroidPosition.y);
             scoreTextPos.add(_.createVector(_.random(-40, 40), _.random(40, -40)))
             scoreText.push({
                 pos: scoreTextPos,
-                amout: amout,
-                life: amout
+                amount: amount,
+                life: amount
             });
         }
     }
@@ -373,12 +373,12 @@ let s = (_) => {
     function levelUpStage() {
         level++;
         levelAnimation = 180;
-        levelAsteroidsMaxium = _.map(level, 1, 3, 8, 25);
+        levelAsteroidsMaximum = _.map(level, 1, 3, 8, 25);
         bullets = [];
     }
 
     function soundInit() {
-        // CURSOR LAZER SOUND
+        // CURSOR LASER SOUND
         cursorFireSound.amp(0.5);
         // CURSOR DAMAGE
         cursorDamageSound.amp(0.33);
