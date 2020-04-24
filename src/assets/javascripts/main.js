@@ -11,6 +11,7 @@ let s = (_) => {
     //        GAME OVERLAY        //
     //----------------------------//
     let debug = false,
+        sound = false,
         cursor,
         cursorFireSound,
         balls      = [],
@@ -34,7 +35,19 @@ let s = (_) => {
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
         document.querySelector('#home').classList.add('started');
-        soundInit();
+        if(sound)
+            soundInit();
+    });
+
+    document.querySelector('.sound').addEventListener('click', () => {
+        if(sound) {
+            soundMute();
+            document.querySelector('.sound').classList.remove('active');
+        } else {
+            soundInit();
+            document.querySelector('.sound').classList.add('active');
+        }
+        sound = !sound;
     });
 
     _.preload = () => {
@@ -386,6 +399,17 @@ let s = (_) => {
         asteroidSpawnSound.amp(1);
         // ASTEROID CRASH
         asteroidCrashSound.amp(0.5);
+    }
+
+    function soundMute() {
+        // CURSOR LASER SOUND
+        cursorFireSound.amp(0);
+        // CURSOR DAMAGE
+        cursorDamageSound.amp(0);
+        // ASTEROID SPAWN
+        asteroidSpawnSound.amp(0);
+        // ASTEROID CRASH
+        asteroidCrashSound.amp(0);
     }
 };
 const P5 = new p5(s);

@@ -58,10 +58,32 @@ header {
         }
         li {
             display: inline-block;
+            vertical-align: middle;
             padding: 0 1.5rem 0 0;
             a {
                 display: block;
                 padding: 0.95rem 0.5rem;
+            }
+            
+            &.sound {
+                svg {
+                    margin: 0.95rem 0;
+                    height: 25px;
+                    width: 25px;
+                    fill: #fff;
+                    display: block;
+                    &.on {
+                        display: none;
+                    }
+                }
+                &.active {
+                    svg.off {
+                        display: none;
+                    }
+                    svg.on {
+                        display: block;
+                    }
+                }
             }
         }
 
