@@ -8,7 +8,7 @@ class Explosion {
         );
         this.lifeAnimation = 50;
         this.dots = [];
-        for(let i = 0; i < 19; i++) {
+        for(let i = 0; i < 9; i++) {
             this.dots.push({
                 x:this._.sin(i)*this.lifeAnimation,
                 y:this._.cos(i)*this.lifeAnimation,

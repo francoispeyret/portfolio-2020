@@ -5,6 +5,7 @@ import Cursor from "./classes/cursor";
 import Asteroid from "./classes/asteroid";
 import Ball from "./classes/ball";
 import Explosion from "./classes/explosion";
+import Loot from "./classes/loot";
 
 let s = (_) => {
     //----------------------------//
@@ -18,9 +19,11 @@ let s = (_) => {
         bullets    = [],
         explosions = [],
         asteroids  = [],
+        loots      = [],
         asteroidSpawnSound,
         asteroidCrashSound,
         cursorDamageSound,
+        cursorLootSound,
         ultimateDelay = 30,
         scoring = 0,
         scoreText = [],
@@ -56,6 +59,7 @@ let s = (_) => {
         _.soundFormats('mp3', 'ogg');
         cursorFireSound    = _.loadSound('/assets/sounds/laser-beam.mp3');
         cursorDamageSound  = _.loadSound('/assets/sounds/cursor-damage.mp3');
+        cursorLootSound    = _.loadSound('/assets/sounds/cursor-loot.mp3');
         asteroidSpawnSound = _.loadSound('/assets/sounds/asteroid-spawn.mp3');
         asteroidCrashSound = _.loadSound('/assets/sounds/asteroid-explode.mp3');
     };
@@ -152,7 +156,7 @@ let s = (_) => {
 
             if (startingAnimation > 1) {
                 startingAnimation--;
-                const scalingAnimation = _.map(startingAnimation, 90, 1, 0, 1),
+                const  scalingAnimation = _.map(startingAnimation, 90, 1, 0, 1),
                     translateAnimationX = _.map(startingAnimation, 90, 1, _.width / 2, 0),
                     translateAnimationY = _.map(startingAnimation, 90, 1, _.height / 2, 0);
 
@@ -182,7 +186,17 @@ let s = (_) => {
                         cursorDamageSound.play();
                         asteroidSubdivide(asteroids[a]);
                         asteroids.splice(a, 1);
-                        a--;
+                        break;
+                    }
+                }
+                for (let o = 0; o < loots.length; o++) {
+                    if (cursor.pos.dist(loots[o].pos) < loots[o].w) {
+                        cursorLootSound.play();
+                        scoreAddAmount(250, loots[o].pos);
+                        loots.splice(o, 1);
+                        if(cursor.life < lifeMax) {
+                            cursor.life++;
+                        }
                         break;
                     }
                 }
@@ -194,8 +208,19 @@ let s = (_) => {
                 asteroidSubdivide(asteroids[0]);
                 asteroids.splice(0, 1);
             }
+            if (_.frameCount % 20 === 10 && loots.length) {
+                explosions.push(new Explosion(_,loots[0].pos,loots[0].w));
+                asteroidCrashSound.play();
+                loots.splice(0, 1);
+            }
         }
 
+
+        // loots
+        for (let o = 0; o < loots.length; o++) {
+            loots[o].update();
+            loots[o].show();
+        }
 
         // ASTEROIDS
         for (let a = 0; a < asteroids.length; a++) {
@@ -244,9 +269,19 @@ let s = (_) => {
                         asteroidSubdivide(asteroids[a]);
                         scoreAddAmount(asteroids[a].w, asteroids[a].pos);
                         asteroids.splice(a, 1);
-                        a--;
                         bullets.splice(b, 1);
-                        b--;
+                        break;
+                    }
+                }
+            }
+            for (let o = 0; o < loots.length; o++) {
+                if (typeof bullets[b] !== 'undefined') {
+                    if (loots[o].pos.dist(bullets[b].pos) <= loots[o].w / 1.5) {
+                        explosions.push(new Explosion(_,loots[o].pos,loots[0].w));
+                        asteroidCrashSound.play();
+                        scoreAddAmount(125, loots[o].pos);
+                        loots.splice(o, 1);
+                        bullets.splice(b, 1);
                         break;
                     }
                 }
@@ -354,6 +389,13 @@ let s = (_) => {
             randShape = 50;
         }
 
+        const lootRand = _.random(0,5);
+        if(lootRand > 2) {
+            loots.push(
+                new Loot(_, asteroidBefore.pos)
+            );
+        }
+
         let asteroidOne = asteroidCreate(randShape, asteroidBefore.pos),
             asteroidTwo = asteroidCreate(randShape, asteroidBefore.pos);
 
@@ -396,7 +438,9 @@ let s = (_) => {
         // CURSOR LASER SOUND
         cursorFireSound.amp(0.5);
         // CURSOR DAMAGE
-        cursorDamageSound.amp(0.33);
+        cursorDamageSound.amp(0.1);
+        // CURSOR LOOT
+        cursorLootSound.amp(0.33);
         // ASTEROID SPAWN
         asteroidSpawnSound.amp(1);
         // ASTEROID CRASH
@@ -408,6 +452,8 @@ let s = (_) => {
         cursorFireSound.amp(0);
         // CURSOR DAMAGE
         cursorDamageSound.amp(0);
+        // CURSOR LOOT
+        cursorLootSound.amp(0);
         // ASTEROID SPAWN
         asteroidSpawnSound.amp(0);
         // ASTEROID CRASH

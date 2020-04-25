@@ -1,20 +1,19 @@
 class Cursor {
     constructor(_) {
-        this._ = _;
-        this.pos = this._.createVector(this._.width / 2, this._.height / 2);
-        this.w = 15;
+        this._    = _;
+        this.pos  = this._.createVector(this._.width / 2, this._.height / 2);
+        this.w    = 15;
         this.wMax = 15;
+        this.life = 5
         this.clickedAnimationCount = 45;
-        this.ultimateAnimationCount = 45;
         this.dammageAnimationCount = 0;
-        this.life = 1
     }
 
     show() {
         let angle = this._.createVector(this._.width / 2, 0).heading();
         if (this._.mouseX !== 0 || this._.mouseY !== 0) {
-            let vel = this._.createVector(this._.mouseX - this.pos.x, this._.mouseY - this.pos.y).div(100);
-            const mag = (vel.mag() / 6).toFixed(1);
+            let vel = this._.createVector(this._.mouseX - this.pos.x, this._.mouseY - this.pos.y).div(75);
+            const mag = (vel.mag() / 3).toFixed(1);
 
             if (this.w - mag > 5) {
                 this.w -= mag;
@@ -28,7 +27,7 @@ class Cursor {
             if (this.clickedAnimationCount >= 44 && typeof thisFireSound !== 'undefined') {
                 //thisFireSound.play();
             }
-            if (this.pos.dist(this._.createVector(this._.mouseX, this._.mouseY)) > 42) {
+            if (this.pos.dist(this._.createVector(this._.mouseX, this._.mouseY)) > 25) {
                 this.pos.add(vel);
             }
             angle = this._.createVector(this._.mouseX - this.pos.x, this._.mouseY - this.pos.y).heading();
@@ -71,14 +70,6 @@ class Cursor {
             } */
         this._.pop();
 
-        if (this.clickedAnimationCount > 0) {
-            const thisClickedSize = this._.map(this.clickedAnimationCount, 45, 1, 0, this.w + 80);
-            this._.noFill();
-            this._.strokeWeight(2);
-            this._.stroke(255, this._.map(thisClickedSize, this.w, this.w + 80, 255, 0));
-            this._.circle(this.pos.x, this.pos.y, thisClickedSize);
-
-        }
     }
 }
 

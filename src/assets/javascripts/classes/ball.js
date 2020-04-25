@@ -3,7 +3,7 @@ import objectNoLimit from "../common/utils";
 
 class Ball {
     constructor(_) {
-        this._ = _;
+        this._   = _;
         this.pos = this._.createVector(
             this._.random(0, this._.width),
             this._.random(0, this._.height)
