@@ -1,12 +1,14 @@
 @font-face {
     font-family: 'Proxima';
-    src: url('../fonts/proxima_nova_regular.woff2') format('woff2'),
-        url('../fonts/proxima_nova_regular.woff') format('woff');
+    src: url('../fonts/pnr.woff2') format('woff2'),
+        url('../fonts/pnr.woff') format('woff');
     font-weight: 400;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Proxima';
-    src: url('../fonts/proxima_nova_extrabold.woff2') format('woff2'),
-        url('../fonts/proxima_nova_extrabold.ttf') format('ttf');
+    src: url('../fonts/pnb.woff2') format('woff2'),
+        url('../fonts/pnb.ttf') format('ttf');
     font-weight: 800;
+    font-display: swap;
 }

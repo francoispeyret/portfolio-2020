@@ -11,4 +11,4 @@ module.exports = merge(webpackBaseConfig, {
             new OptimizeCSSAssetsPlugin()
         ]
     }
-})
+});

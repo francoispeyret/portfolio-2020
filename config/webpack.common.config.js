@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -17,7 +18,6 @@ module.exports = {
         rules: [
             {
                 test: [/.js$/],
-                exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -65,8 +65,12 @@ module.exports = {
     },
 
     plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'style.[chunkhash].css',
+            chunkFilename: "[id].css"
+        }),
         new HtmlWebpackPlugin({
-            title: 'François Peyret - WebDeveloper',
+            title: 'François Peyret - Web Front Developer',
             template: './src/index.html',
             inject: true,
             minify: {
@@ -74,8 +78,11 @@ module.exports = {
                 collapseWhitespace: true
             }
         }),
-        new MiniCssExtractPlugin({
-            filename: 'style.[chunkhash].css'
+        new HTMLInlineCSSWebpackPlugin({
+            replace: {
+                removeTarget: true,
+                target: '<!-- inline_css_plugin -->',
+            },
         }),
         new CopyWebpackPlugin([{
             from: './src/assets/images',
