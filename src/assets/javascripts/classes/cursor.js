@@ -12,7 +12,7 @@ class Cursor {
     show() {
         let angle = this._.createVector(this._.width / 2, 0).heading();
         if (this._.mouseX !== 0 || this._.mouseY !== 0) {
-            let vel = this._.createVector(this._.mouseX - this.pos.x, this._.mouseY - this.pos.y).div(75);
+            let vel = this._.createVector(this._.mouseX - this.pos.x, this._.mouseY - this.pos.y).div(45);
             const mag = (vel.mag() / 3).toFixed(1);
 
             if (this.w - mag > 5) {

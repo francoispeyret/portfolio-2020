@@ -24,25 +24,6 @@ header {
     top: 0;
     right: 0;
     left: 0;
-    &::after {
-        content:"";
-        display: block;
-        position: absolute;
-        z-index: 0;
-        left: -30px;
-        right: -30px;
-        bottom: 0;
-        top: -40px;
-        height: calc(100% + 40px);
-        opacity: 0.92;
-        animation: backgroundAnimation ease-in-out 15s infinite;
-        filter: blur(12px);
-        pointer-events: none;
-        
-        @media (max-width: 769px) {
-            display: none;
-        }
-    }
     > * {
         position: relative;
         z-index: 1;

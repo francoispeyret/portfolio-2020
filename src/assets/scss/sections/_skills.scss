@@ -33,13 +33,14 @@
             strong {
                 display: block;
                 transition: $easing;
-                display: block;
                 font-size: 1.8rem;
                 padding: 0.65rem 1.15rem;
 
                 border: 2px solid #fff;
                 margin-right: -2px;
                 margin-bottom: -2px;
+
+                cursor: help;
 
                 &::before {
                     content:"#";
@@ -92,6 +93,16 @@
             &.cypress {
                 strong:hover {
                     background: #04c38e;
+                }
+            }
+            &.git {
+                strong:hover {
+                    background: #222;
+                }
+            }
+            &.canvas {
+                strong:hover {
+                    background: lighten(#807d00,10%);
                 }
             }
         }

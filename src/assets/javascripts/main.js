@@ -1,5 +1,6 @@
 import * as p5 from "p5";
 import * as p5moduleSound from  "p5/lib/addons/p5.sound";
+import { gsap } from "gsap";
 
 import Cursor from "./classes/cursor";
 import Asteroid from "./classes/asteroid";
@@ -67,6 +68,7 @@ let s = (_) => {
     _.setup = () => {
         let canvas = _.createCanvas(innerWidth - 4, innerHeight);
         canvas.parent('p5-holder');
+        _.frameRate(30);
 
         cursor = new Cursor(_);
 
@@ -99,7 +101,7 @@ let s = (_) => {
             _.fill(255);
             _.textAlign(_.LEFT);
             _.textSize(28);
-            _.text('€' + scoring, 25, 140);
+            _.text('€' + scoring, 25, 110);
             _.textSize(14);
             _.text('LVL' + level, 25, 160);
 
@@ -112,7 +114,7 @@ let s = (_) => {
                 } else {
                     _.noFill();
                 }
-                _.rect(25 + (o * 15), 93, 8, 18);
+                _.rect(25 + (o * 15), 121, 8, 18);
             }
             _.stroke(255);
             _.noFill();
@@ -324,7 +326,7 @@ let s = (_) => {
 
             bullets.push({
                 pos: _.createVector(cursor.pos.x, cursor.pos.y),
-                target: _.createVector(_.mouseX - cursor.pos.x, _.mouseY - cursor.pos.y).limit(12.5)
+                target: _.createVector(_.mouseX - cursor.pos.x, _.mouseY - cursor.pos.y).limit(20)
             });
         }
     });
