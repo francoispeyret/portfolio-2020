@@ -16,6 +16,55 @@
         text-transform: uppercase;
         font-size: 0.66rem;
     }
+    
+    #skill-root {
+        max-width: 1080px;
+        margin-right: auto;
+        margin-left: auto;
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        li {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 160px;
+            max-width: 160px;
+            flex: 0 0 160px;
+            border: 2px solid #fff;
+            margin: 10px;
+            padding: 10px;
+            text-transform: uppercase;
+            font-size: 22px;
+            box-sizing: border-box;
+            &:hover {
+            }
+            
+            .id {
+                font-size: 12px;
+            }
+            
+            .ref {
+                font-size: 62px;
+                font-weight: 800;
+                text-transform: capitalize;
+            }
+            .name {
+                font-size: 14px;
+                text-transform: capitalize;
+                display: flex;
+                .left {
+                    text-align: left;
+                }
+                .right {
+                    flex-grow: 1;
+                    text-align: right;
+                }
+            }
+        }
+    }
 
     ul {
         margin-top: 2rem;

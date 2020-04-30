@@ -31,7 +31,7 @@ let s = (_) => {
         gameStarted = false,
         gameResume = false,
         startingAnimation = 90,
-        lifeMax = 5,
+        lifeMax = 3,
         level = 1,
         levelAnimation = 180,
         levelAsteroidsMaximum = 12;

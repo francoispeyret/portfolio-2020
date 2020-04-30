@@ -72,7 +72,7 @@ header {
                     height: 26px;
                     width: 26px;
                     fill: #fff;
-                    display: block;
+                    display: inline-block;
                     &.on {
                         display: none;
                     }
@@ -83,7 +83,7 @@ header {
                         display: none;
                     }
                     svg.on {
-                        display: block;
+                        display: inline-block;
                     }
                 }
             }
@@ -97,6 +97,7 @@ header {
             &.active {
                 ul {
                     right: 0;
+                    opacity: 1;
                 }
             }
 
@@ -117,6 +118,7 @@ header {
                 position: absolute;
                 top: 4rem;
                 right: -100%;
+                opacity: 0;
                 height: auto;
             }
             li {

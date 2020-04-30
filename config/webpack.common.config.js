@@ -13,6 +13,11 @@ module.exports = {
         path: path.resolve(__dirname, '../dist'),
         filename: '[name].[chunkhash].js'
     },
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000
+    },
 
     module: {
         rules: [
@@ -22,7 +27,11 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            '@babel/preset-env'
+                            '@babel/preset-env',
+                            "@babel/preset-react"
+                        ],
+                        plugins: [
+                            "@babel/plugin-proposal-class-properties",
                         ]
                     }
                 }

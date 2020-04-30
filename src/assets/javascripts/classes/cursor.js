@@ -4,7 +4,7 @@ class Cursor {
         this.pos  = this._.createVector(this._.width / 2, this._.height / 2);
         this.w    = 15;
         this.wMax = 15;
-        this.life = 5
+        this.life = 3
         this.clickedAnimationCount = 45;
         this.dammageAnimationCount = 0;
     }
