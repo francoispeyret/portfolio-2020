@@ -76,3 +76,33 @@
         }
     }
 }
+
+.mouse-invit {
+    width: 30px;
+    height: 50px;
+    border: 3px solid #fff;
+    border-radius: 20px;
+    position: fixed;
+    top: calc(100% - 65px);
+    left: calc(50% - 15px);
+    
+    .scroll {
+        display: block;
+        height: 4px;
+        width: 4px;
+        border-radius: 3px;
+        background-color: #fff;
+        margin: 8px auto 0;
+        
+        animation: scrollInvit ease-in-out 1.5s infinite;
+        
+        @keyframes scrollInvit {
+            0%,70%,100% {
+                transform: none;
+            }
+            80% {
+                transform: translateY(5px);
+            }
+        }
+    }
+}

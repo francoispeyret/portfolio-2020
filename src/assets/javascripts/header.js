@@ -12,6 +12,12 @@ gsap.from("#header", {
     duration: .6,
     delay: 1
 });
+gsap.from(".mouse-invit", {
+    opacity:0,
+    y: 100,
+    duration: .6,
+    delay: 1
+});
 
 
 let headerArrow = {
@@ -40,6 +46,16 @@ function windowScroll(e) {
         duration: .2,
         delay: .1
     });
+    const windowScrollTop = document.getElementsByTagName('html')[0].scrollTop;
+
+    if(windowScrollTop > 75) {
+        gsap.to(".mouse-invit", {
+            opacity:0,
+            y: 100,
+            duration: .6,
+            delay: 1
+        });
+    }
 }
 
 document.querySelector('#toggle-mobile').addEventListener('click', () => {

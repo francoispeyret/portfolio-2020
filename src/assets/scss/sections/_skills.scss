@@ -19,18 +19,26 @@
     
     #skill-root {
         max-width: 1080px;
+        min-height: 772px;
         margin-right: auto;
         margin-left: auto;
+        @media (max-width: 1132px) {
+            max-width: 800px;
+        }
         ul {
             display: flex;
             flex-wrap: wrap;
             align-items: flex-end;
+            transition: all ease-in-out .3s;
+            @media (max-width: 832px) {
+                justify-content: center;
+            }
         }
         li {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 160px;
+            min-height: 160px;
             max-width: 160px;
             flex: 0 0 160px;
             border: 2px solid #fff;
@@ -39,7 +47,25 @@
             text-transform: uppercase;
             font-size: 22px;
             box-sizing: border-box;
-            &:hover {
+            transition: background-color ease-in-out .2s;
+            @media (max-width: 1132px) {
+                min-height: 110px;
+                max-width: 110px;
+                flex: 0 0 110px;
+            }
+            
+            &.space {
+                @media (max-width: 832px) {
+                    display: none;
+                }
+                &:nth-child(2) {
+                    max-width: 520px;
+                    flex: 0 0 520px;
+                    @media (max-width: 1132px) {
+                        max-width: 370px;
+                        flex: 0 0 370px;
+                    }
+                }
             }
             
             .id {
@@ -50,11 +76,17 @@
                 font-size: 62px;
                 font-weight: 800;
                 text-transform: capitalize;
+                @media (max-width: 1132px) {
+                    font-size: 42px;
+                }
             }
             .name {
                 font-size: 14px;
                 text-transform: capitalize;
                 display: flex;
+                @media (max-width: 1132px) {
+                    font-size: 9px;
+                }
                 .left {
                     text-align: left;
                 }
@@ -64,94 +96,127 @@
                 }
             }
         }
+        
+        ul.list {
+            li {
+                flex: 0 0 auto;
+                max-width: none;
+                text-align: left;
+                min-height: 60px;
+                padding: 20px;
+                
+                .ref {
+                    font-size: 32px;
+                    @media (max-width: 769px) {
+                        font-size: 22px;
+                    }
+                }
+                
+                .name,
+                .id {
+                    display: none;
+                }
+                
+            }
+        }
+        
+        .loading {
+            ul {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+        }
     }
-
-    ul {
-        margin-top: 2rem;
-        list-style: none;
+    .sort {
         display: flex;
-        flex-wrap: wrap;
+        max-width: 164px;
+        margin: 2rem auto;
         justify-content: center;
-        max-width: 1160px;
-
-        li {
+        
+        > div {
+            padding: 11.5px 10px;
+            cursor: pointer;
             position: relative;
-            display: inline-block;
-            transition: $easing;
-
-            strong {
-                display: block;
-                transition: $easing;
-                font-size: 1.8rem;
-                padding: 0.65rem 1.15rem;
-
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 56px;
+            transition: all ease-in-out .2s;
+            
+            &.active {
+                .carret {
+                    background-color: #fff;
+                    &:nth-child(4) {
+                        background-color: transparent;
+                    }
+                }
+                .tiret:first-child,
+                .tiret:last-child {
+                    flex: 0 0 28px;
+                }
+                .tiret:nth-child(2) {
+                    flex: 0 0 20px;
+                }
+                .circle {
+                    background-color: #fff;
+                    width: 32px;
+                    height: 32px;
+                    margin: 0;
+                    &.small {
+                        width: 8px;
+                        height: 8px;
+                    }
+                }
+            }
+            
+            .carret {
+                margin: 2px;
+                flex: 0 0 12px;
+                height: 12px;
+                width: 12px;
                 border: 2px solid #fff;
-                margin-right: -2px;
-                margin-bottom: -2px;
-
-                cursor: help;
-
-                &::before {
-                    content:"#";
-                    font-weight: 300;
-                    font-size: 1rem;
-                }
-
+                transition: all ease-in-out .2s;
             }
-
-            &.prestashop {
-                strong:hover {
-                    background: #7c1b4c;
+            .tiret {
+                margin: 4px 2px;
+                flex: 0 0 28px;
+                width: 28px;
+                border-bottom: 3px solid #fff;
+                transition: all ease-in-out .2s;
+                &:last-child {
+                    flex: 0 0 20px;
+                }
+                &:first-child {
+                    flex: 0 0 16px;
                 }
             }
-            &.shopify {
-                strong:hover {
-                    background: #07ad23;
+            .circle {
+                width: 28px;
+                height: 28px;
+                border-radius: 20px;
+                border: 3px solid #fff;
+                transition: all ease-in-out .2s;
+                margin: 4px 4px 0 0;
+                &.small {
+                    margin: 0;
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    left: 37px;
+                    top: 7px;
                 }
             }
-            &.adobe {
-                strong:hover {
-                    background: #c00606;
-                }
-            }
-            &.sass {
-                strong:hover {
-                    background: #c00682;
-                }
-            }
-            &.javascript {
-                strong:hover {
-                    background: #807d00;
-                }
-            }
-            &.webpack {
-                strong:hover {
-                    background: #004280;
-                }
-            }
-            &.php {
-                strong:hover {
-                    background: #4F5B93;
-                }
-            }
-            &.react {
-                strong:hover {
-                    background: #3997b1;
-                }
-            }
-            &.cypress {
-                strong:hover {
-                    background: #04c38e;
-                }
-            }
-            &.git {
-                strong:hover {
-                    background: #222;
-                }
-            }
-            &.canvas {
-                strong:hover {
-                    background: lighten(#807d00,10%);
+        }
+        
+        .list,
+        .grid {
+        }
+        
+        &:hover {
+            > div {
+                opacity: 0.4;
+                
+                &:hover {
+                    opacity: 1;
                 }
             }
         }

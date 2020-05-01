@@ -23,6 +23,10 @@ class Skill extends React.Component {
     }
 
     render() {
+        const name =
+            this.props.sort === 'grid' ?
+                this.props.name.slice(0, 2) :
+                this.props.name;
         return (
             <li
                 onMouseEnter={this.handleMouseEnter}
@@ -35,14 +39,14 @@ class Skill extends React.Component {
                     {this.props.i}
                 </div>
                 <div className="ref">
-                    {this.props.name.slice(0, 2)}
+                    {name}
                 </div>
                 <div className="name">
                     <div className="left">
                         {this.props.name}
                     </div>
                     <div className="right">
-                        {String(this.props.i*2+Math.random()).slice(0, 5)}
+                        {this.props.w}
                     </div>
                 </div>
             </li>
