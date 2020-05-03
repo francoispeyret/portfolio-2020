@@ -12,6 +12,7 @@ gsap.from("#header", {
     duration: .6,
     delay: 1
 });
+
 gsap.from(".mouse-invit", {
     opacity:0,
     y: 100,
@@ -38,14 +39,16 @@ let menu = {
 window.addEventListener('scroll', windowScroll);
 window.addEventListener('resize', windowScroll);
 
-function windowScroll(e) {
+function windowScroll() {
     const pos = main.el.getBoundingClientRect();
     const arrowPos = Math.floor(((-pos.y * (pos.width) / pos.height) - 5));
+
     gsap.to(headerArrow.el, {
         x: arrowPos,
         duration: .2,
         delay: .1
     });
+
     const windowScrollTop = document.getElementsByTagName('html')[0].scrollTop;
 
     if(windowScrollTop > 75) {

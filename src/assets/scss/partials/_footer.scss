@@ -1,6 +1,7 @@
 footer {
     padding-bottom: 3rem;
-    padding-top: 50vh;
+    padding-top: 75vh;
+
     position: relative;
 
     &::before,
@@ -37,8 +38,8 @@ footer {
         @media (max-width: 769px) {
             flex: 0 0 100%;
             max-width: 100%;
-            margin-bottom: 2rem;
-            margin-top: 2rem;
+            margin-bottom: .5rem;
+            margin-top: .5rem;
             text-align: center;
         }
     }
@@ -65,9 +66,12 @@ footer {
     .bravo {
         font-size: 2.4rem;
         line-height: 1;
-        max-width: 240px;
+        max-width: 320px;
+        position: absolute;
+        bottom: 40px;
         @media (max-width: 769px) {
-            margin: 0 auto;
+            text-align: left;
+            bottom: 220px;
         }
     }
 
@@ -106,5 +110,24 @@ footer {
             }
         }
     }
+
+    .cake {
+        cursor: pointer;
+        display: inline-block;
+        animation: cake ease-in-out 1.5s infinite;
+
+        @keyframes cake {
+            0%, 15%, 100% {
+                transform: translateX(0);
+            }
+            5% {
+                transform: translateX(-4px);
+            }
+            10% {
+                transform: translateX(4px);
+            }
+        }
+    }
+
 
 }

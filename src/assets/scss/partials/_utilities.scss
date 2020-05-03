@@ -57,3 +57,45 @@ a {
     color: white;
     text-decoration: none;
 }
+
+.tooltip {
+    border: 2px solid #fff;
+    background: transparent;
+    color: white;
+    padding: 4px 8px 5px;
+    font-size: 13px;
+    display: none;
+    position: absolute;
+    opacity: 0;
+    &[data-show] {
+        display: block;
+        animation: fadeIn ease-in-out .5s;
+        opacity: 1;
+
+        @keyframes fadeIn {
+            0%{
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+    }
+  }
+
+  .arrow,
+  .arrow::before {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    z-index: -1;
+    top: -6px;
+    left: -6px;
+  }
+
+  .arrow::before {
+    content: '';
+    border: 6px solid transparent;
+    border-bottom-color: #fff;
+  }

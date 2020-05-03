@@ -1,5 +1,5 @@
 #about {
-    max-width: 340px;
+    max-width: 640px;
     margin-left: 20vw;
     @media (max-width: 769px) {
         margin-left: 10vw;
@@ -32,7 +32,7 @@
 
     p {
         text-transform: uppercase;
-        font-size: 2.8rem;
+        font-size: 2rem;
         line-height: 1;
         @media (max-width: 769px) {
             font-size: 1.8rem;
@@ -41,9 +41,14 @@
 
     .tags {
         svg {
+            padding: 5px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
             fill: #fff;
             opacity: 0.3;
             transition: $easing;
+            margin: 0;
 
             &:hover {
                 opacity: 1;

@@ -33,7 +33,7 @@ let s = (_) => {
         startingAnimation = 90,
         lifeMax = 3,
         level = 1,
-        levelAnimation = 180,
+        levelAnimation = 90,
         levelAsteroidsMaximum = 12;
 
     document.querySelector('#play-start').addEventListener('click', () => {
@@ -139,7 +139,7 @@ let s = (_) => {
             // STAGE ANNONCEMENT
             if (levelAnimation > 1) {
                 _.fill(255);
-                const levelTextSize = _.map(levelAnimation, 180, 1, 0, 48);
+                const levelTextSize = _.map(levelAnimation, 90, 1, 0, 48);
                 _.textSize(levelTextSize);
                 _.textAlign(_.CENTER);
                 _.text('LEVEL' + level, _.width / 2, _.height / 2);
@@ -431,7 +431,7 @@ let s = (_) => {
 
     function levelUpStage() {
         level++;
-        levelAnimation = 180;
+        levelAnimation = 90;
         levelAsteroidsMaximum = _.map(level, 1, 3, 8, 25);
         bullets = [];
     }
