@@ -120,15 +120,15 @@ let s = (_) => {
             _.noFill();
 
             for (let s = 0; s < scoreText.length; s++) {
-                const amoutFontSize = _.map(scoreText[s].amount, 40, 100, 14, 22),
-                      amoutOpacity = _.map(scoreText[s].life, 100, 0, 255, 150);
+                const amoutFontSize = _.map(scoreText[s].amount, 40, 100, 14, 22);
 
-                _.fill(255, amoutOpacity);
+                _.noStroke();
+                _.fill(255, scoreText[s].life/2);
                 _.textSize(amoutFontSize);
                 _.text('+' + scoreText[s].amount, scoreText[s].pos.x, scoreText[s].pos.y);
                 scoreText[s].pos.add(_.createVector(0, -0.5));
 
-                scoreText[s].life--;
+                scoreText[s].life-=6;
                 if (scoreText[s].life <= 0) {
                     scoreText.splice(s, 1);
                     s--;
@@ -424,7 +424,7 @@ let s = (_) => {
             scoreText.push({
                 pos: scoreTextPos,
                 amount: amount,
-                life: amount
+                life: 505
             });
         }
     }
