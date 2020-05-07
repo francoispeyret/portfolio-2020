@@ -40,8 +40,11 @@ window.addEventListener('scroll', windowScroll);
 window.addEventListener('resize', windowScroll);
 
 function windowScroll() {
-    const pos = main.el.getBoundingClientRect();
-    const arrowPos = Math.floor(((-pos.y * (pos.width) / pos.height) - 5));
+
+    const windowScrollTop = document.getElementsByTagName('html')[0].scrollTop;
+    const documentHeight = document.getElementsByTagName('body')[0].offsetHeight;
+    const menuWidth = main.el.offsetWidth - 50;
+    const arrowPos = Math.floor((windowScrollTop ) * menuWidth / (documentHeight - window.innerHeight));
 
     gsap.to(headerArrow.el, {
         x: arrowPos,
@@ -49,14 +52,11 @@ function windowScroll() {
         delay: .1
     });
 
-    const windowScrollTop = document.getElementsByTagName('html')[0].scrollTop;
-
-    if(windowScrollTop > 75) {
+    if(windowScrollTop > 50) {
         gsap.to(".mouse-invit", {
             opacity:0,
             y: 100,
-            duration: .6,
-            delay: 1
+            duration: 1
         });
     }
 }

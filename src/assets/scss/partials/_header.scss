@@ -60,6 +60,7 @@ header {
             display: inline-block;
             vertical-align: middle;
             padding: 0 1.5rem 0 0;
+            text-transform: uppercase;
             a {
                 display: block;
                 padding: 0.95rem 0.5rem;
@@ -73,6 +74,7 @@ header {
                     width: 26px;
                     fill: #fff;
                     display: inline-block;
+                    vertical-align: middle;
                     &.on {
                         display: none;
                     }

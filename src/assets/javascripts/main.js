@@ -1,12 +1,14 @@
 import * as p5 from "p5";
 import * as p5moduleSound from  "p5/lib/addons/p5.sound";
-import { gsap } from "gsap";
 
 import Cursor from "./classes/cursor";
-import Asteroid from "./classes/asteroid";
-import Ball from "./classes/ball";
 import Explosion from "./classes/explosion";
-import Loot from "./classes/loot";
+import BallsController from "./controllers/balls";
+import BulletsController from "./controllers/bullets";
+import AsteroidsController from './controllers/asteroids';
+import ExplosionsController from './controllers/explosions';
+import LootsController from './controllers/loots';
+import SoundController from './controllers/sounds';
 
 let s = (_) => {
     //----------------------------//
@@ -15,17 +17,13 @@ let s = (_) => {
     let debug = false,
         sound = false,
         cursor,
-        cursorFireSound,
-        balls      = [],
-        bullets    = [],
+        ballsController      = null,
+        bulletsController    = null,
+        asteroidsController  = null,
+        explosionsController = null,
+        lootsController      = null,
+        soundController      = null,
         explosions = [],
-        asteroids  = [],
-        loots      = [],
-        asteroidSpawnSound,
-        asteroidCrashSound,
-        cursorDamageSound,
-        cursorLootSound,
-        ultimateDelay = 30,
         scoring = 0,
         scoreText = [],
         gameStarted = false,
@@ -33,48 +31,43 @@ let s = (_) => {
         startingAnimation = 90,
         lifeMax = 3,
         level = 1,
-        levelAnimation = 90,
-        levelAsteroidsMaximum = 12;
+        levelAnimation = 90;
 
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
         document.querySelector('#home').classList.add('started');
         if(sound)
-            soundInit();
+        soundController.soundInit();
         else
-            soundMute();
+        soundController.soundMute();
     });
 
     document.querySelector('.sound').addEventListener('click', () => {
         if(sound) {
-            soundMute();
+            soundController.soundMute();
             document.querySelector('.sound').classList.remove('active');
         } else {
-            soundInit();
+            soundController.soundInit();
             document.querySelector('.sound').classList.add('active');
         }
         sound = !sound;
     });
 
     _.preload = () => {
-        _.soundFormats('mp3', 'ogg');
-        cursorFireSound    = _.loadSound('/assets/sounds/laser-beam.mp3');
-        cursorDamageSound  = _.loadSound('/assets/sounds/cursor-damage.mp3');
-        cursorLootSound    = _.loadSound('/assets/sounds/cursor-loot.mp3');
-        asteroidSpawnSound = _.loadSound('/assets/sounds/asteroid-spawn.mp3');
-        asteroidCrashSound = _.loadSound('/assets/sounds/asteroid-explode.mp3');
+        soundController = new SoundController(_);
     };
 
     _.setup = () => {
-        let canvas = _.createCanvas(innerWidth - 4, innerHeight);
+        let canvas = _.createCanvas(_.windowWidth - 20, _.windowHeight);
         canvas.parent('p5-holder');
         _.frameRate(30);
 
-        cursor = new Cursor(_);
-
-        for (let i = 0; i < 33; i++) {
-            balls[i] = new Ball(_);
-        }
+        cursor = new Cursor(_),
+        ballsController = new BallsController(_),
+        bulletsController = new BulletsController(_),
+        asteroidsController = new AsteroidsController(_, soundController),
+        explosionsController = new ExplosionsController(_),
+        lootsController = new LootsController(_);
 
     };
 
@@ -167,12 +160,10 @@ let s = (_) => {
             }
         }
 
-
         // BALLS
-        for (let i = 0; i < balls.length; i++) {
-            balls[i].show();
-            balls[i].update();
-        }
+        ballsController.show();
+        ballsController.update();
+
         _.noFill();
 
         // CURSOR
@@ -181,21 +172,22 @@ let s = (_) => {
         if(cursor.life > 0) {
             // CURSOR - CHECK COLISION
             if (cursor.dammageAnimationCount < 1) {
-                for (let a = 0; a < asteroids.length; a++) {
-                    if (cursor.pos.dist(asteroids[a].pos) < asteroids[a].w / 2) {
+                for (let a = 0; a < asteroidsController.asteroids.length; a++) {
+                    if (cursor.pos.dist(asteroidsController.asteroids[a].pos) < asteroidsController.asteroids[a].w / 2) {
                         cursor.life--;
                         cursor.dammageAnimationCount = 90;
-                        cursorDamageSound.play();
-                        asteroidSubdivide(asteroids[a]);
-                        asteroids.splice(a, 1);
+                        soundController.cursorDamageSound.play();
+                        explosions.push(new Explosion(_,asteroidsController.asteroids[a].pos,asteroidsController.asteroids[a].w));
+                        asteroidsController.asteroidSubdivide(asteroidsController.asteroids[a],lootsController);
+                        asteroidsController.asteroids.splice(a, 1);
                         break;
                     }
                 }
-                for (let o = 0; o < loots.length; o++) {
-                    if (cursor.pos.dist(loots[o].pos) < loots[o].w) {
-                        cursorLootSound.play();
-                        scoreAddAmount(250, loots[o].pos);
-                        loots.splice(o, 1);
+                for (let o = 0; o < lootsController.loots.length; o++) {
+                    if (cursor.pos.dist(lootsController.loots[o].pos) < lootsController.loots[o].w) {
+                        soundController.cursorLootSound.play();
+                        scoreAddAmount(250, lootsController.loots[o].pos);
+                        lootsController.loots.splice(o, 1);
                         if(cursor.life < lifeMax) {
                             cursor.life++;
                         }
@@ -206,99 +198,41 @@ let s = (_) => {
                 cursor.dammageAnimationCount--;
             }
         } else {
-            if (_.frameCount % 20 === 0 && asteroids.length) {
-                asteroidSubdivide(asteroids[0]);
-                asteroids.splice(0, 1);
+            if (_.frameCount % 20 === 0 && asteroidsController.asteroids.length) {
+                
+                explosionsController.createExplosion(
+                    asteroidsController.asteroids[0].pos,
+                    asteroidsController.asteroids[0].w
+                    );
+                asteroidsController.asteroidSubdivide(asteroidsController.asteroids[0],lootsController);
+                asteroidsController.asteroids.splice(0, 1);
             }
-            if (_.frameCount % 20 === 10 && loots.length) {
-                explosions.push(new Explosion(_,loots[0].pos,loots[0].w));
-                asteroidCrashSound.play();
-                loots.splice(0, 1);
+            if (_.frameCount % 20 === 10 && lootsController.loots.length) {
+                explosionsController.createExplosion(
+                    lootsController.loots[0].pos,
+                    lootsController.loots[0].w
+                    );
+                soundController.asteroidCrashSound.play();
+                lootsController.loots.splice(0, 1);
             }
         }
 
 
-        // loots
-        for (let o = 0; o < loots.length; o++) {
-            loots[o].update();
-            loots[o].show();
-        }
+        // LOOTS
+        lootsController.show();
+        lootsController.update();
 
         // ASTEROIDS
-        for (let a = 0; a < asteroids.length; a++) {
-            asteroids[a].update();
-            asteroids[a].show();
-        }
-
-        // ASTEROIDS SPAWN
-        if(cursor.life > 0) {
-            if (_.frameCount % 360 === 0) {
-                if (asteroids.length > 0) {
-
-                    // Fix the asteroids jam if player is inactive
-                    if (asteroids.length < levelAsteroidsMaximum) {
-                        let asteroidNewOne = asteroidCreate(100);
-                        asteroids.push(asteroidNewOne);
-                        asteroidSpawnSound.play();
-                    }
-                } else {
-                    // LEVEL STAGE UP
-                    levelUpStage();
-                }
-            }
-        }
+        asteroidsController.show();
+        asteroidsController.update(cursor);
 
         // BULLETS
-
-        _.fill(255);
-        _.noStroke();
-        for (let b = 0; b < bullets.length; b++) {
-            _.rect(bullets[b].pos.x, bullets[b].pos.y, 6, 6);
-            bullets[b].pos.add(bullets[b].target);
-            if (
-                bullets[b].pos.x + 6 < 0 ||
-                bullets[b].pos.x - 6 > _.width ||
-                bullets[b].pos.y + 6 < 0 ||
-                bullets[b].pos.y - 6 > _.height
-            ) {
-                bullets.splice(b, 1);
-                b--;
-            }
-
-            for (let a = 0; a < asteroids.length; a++) {
-                if (typeof bullets[b] !== 'undefined') {
-                    if (asteroids[a].pos.dist(bullets[b].pos) <= asteroids[a].w / 2) {
-                        asteroidSubdivide(asteroids[a]);
-                        scoreAddAmount(asteroids[a].w, asteroids[a].pos);
-                        asteroids.splice(a, 1);
-                        bullets.splice(b, 1);
-                        break;
-                    }
-                }
-            }
-            for (let o = 0; o < loots.length; o++) {
-                if (typeof bullets[b] !== 'undefined') {
-                    if (loots[o].pos.dist(bullets[b].pos) <= loots[o].w / 1.5) {
-                        explosions.push(new Explosion(_,loots[o].pos,loots[0].w));
-                        asteroidCrashSound.play();
-                        scoreAddAmount(125, loots[o].pos);
-                        loots.splice(o, 1);
-                        bullets.splice(b, 1);
-                        break;
-                    }
-                }
-            }
-        }
-
+        bulletsController.show();
+        bulletsController.update(asteroidsController, lootsController, explosionsController);
 
         // EXPLOSIONS
-        for (let i = 0; i < explosions.length; i++) {
-            explosions[i].show();
-            explosions[i].update();
-            if(explosions[i].lifeAnimation < -100) {
-                explosions.splice(i, 1);
-            }
-        }
+        explosionsController.show();
+        explosionsController.update();
 
         _.pop();
 
@@ -309,6 +243,9 @@ let s = (_) => {
     };
 
     window.addEventListener('mousedown', (e) => {
+        if (gameStarted === false) {
+            return;
+        }
         if (gameResume === true) {
             resumeGame();
             return;
@@ -316,27 +253,14 @@ let s = (_) => {
         if (cursor.dammageAnimationCount > 1) {
             return;
         }
-        if (e.target.id === 'header' || e.target.id === 'home' || e.target.id === 'skills' || e.target.id === 'contact' || e.target.id === 'footer') {
-            if (levelAnimation > 1 || startingAnimation > 1) {
-                return;
-            }
-            e.preventDefault();
-            cursorFireSound.play();
-            cursor.clickedAnimationCount = 45;
-
-            bullets.push({
-                pos: _.createVector(cursor.pos.x, cursor.pos.y),
-                target: _.createVector(_.mouseX - cursor.pos.x, _.mouseY - cursor.pos.y).limit(20)
-            });
+        if (levelAnimation > 1 || startingAnimation > 1) {
+            return;
         }
-    });
+        e.preventDefault();
+        soundController.cursorFireSound.play();
+        cursor.clickedAnimationCount = 45;
 
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 17) {
-            ultimateDelay = true;
-            e.preventDefault();
-            return false;
-        }
+        bulletsController.fire(cursor);
     });
 
     window.addEventListener('blur', (e) => {
@@ -344,20 +268,22 @@ let s = (_) => {
     });
 
     function resumeGame() {
-        gameResume = !gameResume;
-        document.querySelector('#home').classList.add('resumed');
-        if (gameResume === true) {
+        if (gameStarted) {
+            gameResume = !gameResume;
             document.querySelector('#home').classList.add('resumed');
-            _.noLoop();
-        } else {
-            document.querySelector('#home').classList.remove('resumed');
-            _.loop();
+            if (gameResume === true) {
+                document.querySelector('#home').classList.add('resumed');
+                _.noLoop();
+            } else {
+                document.querySelector('#home').classList.remove('resumed');
+                _.loop();
+            }
+            _.resizeCanvas(_.windowWidth - 20, _.windowHeight);
         }
-        _.resizeCanvas(window.innerWidth - 4, window.innerHeight)
     }
 
     window.addEventListener('resize',
-        _.resizeCanvas(window.innerWidth - 4, window.innerHeight)
+        _.resizeCanvas(_.windowWidth - 20, _.windowHeight)
     );
 
 
@@ -373,47 +299,8 @@ let s = (_) => {
             } else if (rand === 3) {
                 randShape = 100;
             }
-            asteroids.push(asteroidCreate(randShape));
+            asteroidsController.asteroidCreate(randShape);
         }
-    }
-
-    function asteroidSubdivide(asteroidBefore) {
-        explosions.push(new Explosion(_,asteroidBefore.pos,asteroidBefore.w));
-        asteroidCrashSound.play();
-
-        let randShape;
-        if (asteroidBefore.w === 30) {
-            // pouf
-            return;
-        } else if (asteroidBefore.w === 50) {
-            randShape = 30;
-        } else if (asteroidBefore.w === 100) {
-            randShape = 50;
-        }
-
-        const lootRand = _.random(0,5);
-        if(lootRand > 2) {
-            loots.push(
-                new Loot(_, asteroidBefore.pos)
-            );
-        }
-
-        let asteroidOne = asteroidCreate(randShape, asteroidBefore.pos),
-            asteroidTwo = asteroidCreate(randShape, asteroidBefore.pos);
-
-        asteroids.push(asteroidOne);
-        asteroids.push(asteroidTwo);
-
-    }
-
-    function asteroidCreate(size, origin) {
-        let position;
-        if (typeof origin !== 'undefined') {
-            position = _.createVector(origin.x, origin.y);
-        } else {
-            position = _.createVector(_.random(0, _.width), _.random(0, _.height));
-        }
-        return new Asteroid(_, size, position);
     }
 
     function scoreAddAmount(amount, asteroidPosition) {
@@ -433,33 +320,8 @@ let s = (_) => {
         level++;
         levelAnimation = 90;
         levelAsteroidsMaximum = _.map(level, 1, 3, 8, 25);
-        bullets = [];
+        bulletsController = new BulletsController(_);
     }
 
-    function soundInit() {
-        // CURSOR LASER SOUND
-        cursorFireSound.amp(0.5);
-        // CURSOR DAMAGE
-        cursorDamageSound.amp(0.1);
-        // CURSOR LOOT
-        cursorLootSound.amp(0.33);
-        // ASTEROID SPAWN
-        asteroidSpawnSound.amp(1);
-        // ASTEROID CRASH
-        asteroidCrashSound.amp(0.5);
-    }
-
-    function soundMute() {
-        // CURSOR LASER SOUND
-        cursorFireSound.amp(0);
-        // CURSOR DAMAGE
-        cursorDamageSound.amp(0);
-        // CURSOR LOOT
-        cursorLootSound.amp(0);
-        // ASTEROID SPAWN
-        asteroidSpawnSound.amp(0);
-        // ASTEROID CRASH
-        asteroidCrashSound.amp(0);
-    }
 };
 const P5 = new p5(s);

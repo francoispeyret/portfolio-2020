@@ -32,7 +32,6 @@ class Skill extends React.Component {
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
                 style={{
-                cursor:'help',
                 backgroundColor: this.state.hover ? this.props.color : 'transparent'
             }}>
                 <div className="id">

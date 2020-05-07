@@ -11,6 +11,9 @@
 html {
     scroll-behavior: smooth;
     cursor: crosshair;
+    
+    scrollbar-color: #fff rgba(#000,0.3);
+    scrollbar-width: thin;
 }
 
 @media (max-width: 769px) {
