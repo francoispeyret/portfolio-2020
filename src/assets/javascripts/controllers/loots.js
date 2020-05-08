@@ -20,6 +20,18 @@ class LootsController {
             this.loots[o].update();
         }
     }
+
+    lootRemove(index) {
+        this.loots.splice(index, 1);
+    }
+
+    lootCreate(position) {
+        if(this._.random(0,5) > 2) {
+            this.loots.push(
+                new Loot(this._, position)
+            );
+        }
+    }
 }
 
 export default LootsController;

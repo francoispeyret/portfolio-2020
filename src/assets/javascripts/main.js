@@ -2,13 +2,16 @@ import * as p5 from "p5";
 import * as p5moduleSound from  "p5/lib/addons/p5.sound";
 
 import Cursor from "./classes/cursor";
-import Explosion from "./classes/explosion";
+import Ui from "./classes/ui";
+
+import AsteroidsController from './controllers/asteroids';
 import BallsController from "./controllers/balls";
 import BulletsController from "./controllers/bullets";
-import AsteroidsController from './controllers/asteroids';
 import ExplosionsController from './controllers/explosions';
 import LootsController from './controllers/loots';
+import ScoresController from './controllers/scores';
 import SoundController from './controllers/sounds';
+import LevelsController from './controllers/levels';
 
 let s = (_) => {
     //----------------------------//
@@ -16,22 +19,20 @@ let s = (_) => {
     //----------------------------//
     let debug = false,
         sound = false,
-        cursor,
+        cursor = null,
+        ui = null,
         ballsController      = null,
         bulletsController    = null,
         asteroidsController  = null,
         explosionsController = null,
         lootsController      = null,
         soundController      = null,
-        explosions = [],
-        scoring = 0,
-        scoreText = [],
+        scoresController     = null,
+        levelsController     = null,
         gameStarted = false,
         gameResume = false,
         startingAnimation = 90,
-        lifeMax = 3,
-        level = 1,
-        levelAnimation = 90;
+        lifeMax = 3;
 
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
@@ -60,14 +61,17 @@ let s = (_) => {
     _.setup = () => {
         let canvas = _.createCanvas(_.windowWidth - 20, _.windowHeight);
         canvas.parent('p5-holder');
-        _.frameRate(30);
+        _.frameRate(60);
 
         cursor = new Cursor(_),
+        ui = new Ui(_),
         ballsController = new BallsController(_),
-        bulletsController = new BulletsController(_),
+        bulletsController = new BulletsController(_, soundController),
         asteroidsController = new AsteroidsController(_, soundController),
         explosionsController = new ExplosionsController(_),
-        lootsController = new LootsController(_);
+        lootsController = new LootsController(_),
+        scoresController = new ScoresController(_),
+        levelsController = new LevelsController(_);
 
     };
 
@@ -90,56 +94,13 @@ let s = (_) => {
 
             // SCORING $$$
 
-            _.noStroke();
-            _.fill(255);
-            _.textAlign(_.LEFT);
-            _.textSize(28);
-            _.text('€' + scoring, 25, 110);
-            _.textSize(14);
-            _.text('LVL' + level, 25, 160);
-
-            // LIFEs
-            _.noFill();
-            _.stroke(255);
-            for (let o = 0; o < lifeMax; o++) {
-                if (o < cursor.life) {
-                    _.fill(255);
-                } else {
-                    _.noFill();
-                }
-                _.rect(25 + (o * 15), 121, 8, 18);
-            }
-            _.stroke(255);
-            _.noFill();
-
-            for (let s = 0; s < scoreText.length; s++) {
-                const amoutFontSize = _.map(scoreText[s].amount, 40, 100, 14, 22);
-
-                _.noStroke();
-                _.fill(255, scoreText[s].life/2);
-                _.textSize(amoutFontSize);
-                _.text('+' + scoreText[s].amount, scoreText[s].pos.x, scoreText[s].pos.y);
-                scoreText[s].pos.add(_.createVector(0, -0.5));
-
-                scoreText[s].life-=6;
-                if (scoreText[s].life <= 0) {
-                    scoreText.splice(s, 1);
-                    s--;
-                }
-            }
+            ui.show(cursor, levelsController, scoresController);
 
             // \\ INTERFACE
             // STAGE ANNONCEMENT
-            if (levelAnimation > 1) {
-                _.fill(255);
-                const levelTextSize = _.map(levelAnimation, 90, 1, 0, 48);
-                _.textSize(levelTextSize);
-                _.textAlign(_.CENTER);
-                _.text('LEVEL' + level, _.width / 2, _.height / 2);
-                levelAnimation--;
-                if (levelAnimation <= 1) {
-                    asteroidsSpawn();
-                }
+            levelsController.show();
+            levelsController.update(asteroidsController);
+            if (levelsController.animationInProgress()) {
                 return;
             }
 
@@ -177,7 +138,12 @@ let s = (_) => {
                         cursor.life--;
                         cursor.dammageAnimationCount = 90;
                         soundController.cursorDamageSound.play();
-                        explosions.push(new Explosion(_,asteroidsController.asteroids[a].pos,asteroidsController.asteroids[a].w));
+                        
+                        explosionsController.createExplosion(
+                            asteroidsController.asteroids[a].pos,
+                            asteroidsController.asteroids[a].w
+                            );
+                        
                         asteroidsController.asteroidSubdivide(asteroidsController.asteroids[a],lootsController);
                         asteroidsController.asteroids.splice(a, 1);
                         break;
@@ -186,8 +152,9 @@ let s = (_) => {
                 for (let o = 0; o < lootsController.loots.length; o++) {
                     if (cursor.pos.dist(lootsController.loots[o].pos) < lootsController.loots[o].w) {
                         soundController.cursorLootSound.play();
-                        scoreAddAmount(250, lootsController.loots[o].pos);
+                        scoresController.scoreCreate(250, lootsController.loots[o].pos);
                         lootsController.loots.splice(o, 1);
+
                         if(cursor.life < lifeMax) {
                             cursor.life++;
                         }
@@ -228,11 +195,15 @@ let s = (_) => {
 
         // BULLETS
         bulletsController.show();
-        bulletsController.update(asteroidsController, lootsController, explosionsController);
+        bulletsController.update(asteroidsController, lootsController, explosionsController, scoresController);
 
         // EXPLOSIONS
         explosionsController.show();
         explosionsController.update();
+
+        // SCORES
+        scoresController.show();
+        scoresController.update();
 
         _.pop();
 
@@ -253,7 +224,7 @@ let s = (_) => {
         if (cursor.dammageAnimationCount > 1) {
             return;
         }
-        if (levelAnimation > 1 || startingAnimation > 1) {
+        if (levelsController.animationInProgress() || startingAnimation > 1) {
             return;
         }
         e.preventDefault();
@@ -286,41 +257,11 @@ let s = (_) => {
         _.resizeCanvas(_.windowWidth - 20, _.windowHeight)
     );
 
-
-    function asteroidsSpawn() {
-        const asteroidsLength = _.map(level, 1, 3, 2, 6);
-        for (let a = 0; a < asteroidsLength; a++) {
-            let randShape, rand = Math.floor(_.random(1, 4));
-
-            if (rand === 1) {
-                randShape = 30;
-            } else if (rand === 2) {
-                randShape = 50;
-            } else if (rand === 3) {
-                randShape = 100;
-            }
-            asteroidsController.asteroidCreate(randShape);
-        }
-    }
-
-    function scoreAddAmount(amount, asteroidPosition) {
-        if (amount > 0) {
-            scoring += amount;
-            let scoreTextPos = _.createVector(asteroidPosition.x, asteroidPosition.y);
-            scoreTextPos.add(_.createVector(_.random(-40, 40), _.random(40, -40)))
-            scoreText.push({
-                pos: scoreTextPos,
-                amount: amount,
-                life: 505
-            });
-        }
-    }
-
     function levelUpStage() {
-        level++;
-        levelAnimation = 90;
-        levelAsteroidsMaximum = _.map(level, 1, 3, 8, 25);
-        bulletsController = new BulletsController(_);
+        //level++;
+        //levelAnimation = 90;
+        //levelAsteroidsMaximum = _.map(level, 1, 3, 8, 25);
+        //bulletsController = new BulletsController(_);
     }
 
 };

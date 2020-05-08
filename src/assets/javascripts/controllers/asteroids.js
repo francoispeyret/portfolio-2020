@@ -1,6 +1,5 @@
 
 import Asteroid from "../classes/asteroid";
-import Loot from "../classes/loot";
 
 class AsteroidsController {
     constructor(_, soundController) {
@@ -29,7 +28,7 @@ class AsteroidsController {
                     // Fix the asteroids jam if player is inactive
                     if (this.asteroids.length < this.levelAsteroidsMaximum) {
                         this.asteroidCreate(100);
-                        //asteroidSpawnSound.play();
+                        this.soundController.asteroidSpawnSound.play();
                     }
                 } else {
                     // LEVEL STAGE UP
@@ -49,6 +48,10 @@ class AsteroidsController {
         this.asteroids.push(new Asteroid(this._, size, position));
     }
 
+    asteroidRemove(index) {
+        this.asteroids.splice(index, 1);
+    }
+
     asteroidSubdivide(asteroidBefore, lootsController) {
         this.soundController.asteroidCrashSound.play();
 
@@ -62,15 +65,26 @@ class AsteroidsController {
             randShape = 50;
         }
 
-        const lootRand = this._.random(0,5);
-        if(lootRand > 2) {
-            lootsController.loots.push(
-                new Loot(this._, asteroidBefore.pos)
-            );
-        }
+        lootsController.lootCreate(asteroidBefore.pos);
 
         this.asteroidCreate(randShape, asteroidBefore.pos),
         this.asteroidCreate(randShape, asteroidBefore.pos);
+    }
+
+    asteroidsSpawn(levelController) {
+        const asteroidsLength = this._.map(levelController.level, 1, 3, 2, 6);
+        for (let a = 0; a < asteroidsLength; a++) {
+            let randShape, rand = Math.floor(this._.random(1, 4));
+
+            if (rand === 1) {
+                randShape = 30;
+            } else if (rand === 2) {
+                randShape = 50;
+            } else if (rand === 3) {
+                randShape = 100;
+            }
+            this.asteroidCreate(randShape);
+        }
     }
 
 }
