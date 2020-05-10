@@ -16,7 +16,7 @@ class AsteroidsController {
         }
     }
 
-    update(cursor) {
+    update(cursor, levelsController, bulletsController) {
         for (let a = 0; a < this.asteroids.length; a++) {
             this.asteroids[a].update();
         }
@@ -32,7 +32,7 @@ class AsteroidsController {
                     }
                 } else {
                     // LEVEL STAGE UP
-                    //levelUpStage();
+                    levelsController.levelUpStage(bulletsController);
                 }
             }
         }

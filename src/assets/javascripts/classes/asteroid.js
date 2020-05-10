@@ -5,7 +5,7 @@ class Asteroid {
     constructor(_, size, position) {
         this._ = _;
         this.pos = position;
-        this.seed = Math.floor(this._.random(1, 3));
+        this.seed = Math.floor(this._.random(1, 4));
         this.vel = this._.createVector(this._.random(1.8, -1.8), this._.random(1.8, -1.8));
         this.w = size;
         this.spawnAnimation = 20;
@@ -32,12 +32,6 @@ class Asteroid {
     }
 
     asteroidShape() {
-        /*if (debug) {
-            this._.noFill();
-            this._.stroke(255, 0, 0);
-            this._.strokeWeight(1);
-            this._.circle(0, 0, this.w, this.w);
-        }*/
         const alpha = this._.map(this.spawnAnimation, 20, 1, 0, 255);
         this._.stroke(255, alpha);
         this._.strokeWeight(2);
@@ -61,6 +55,15 @@ class Asteroid {
                 this._.vertex(18, 18);
                 this._.vertex(12, 22);
                 this._.vertex(5, 20);
+            } else if (this.seed == 3) {
+                this._.vertex(1, 4);
+                this._.vertex(6, 2);
+                this._.vertex(20, 5);
+                this._.vertex(20, 10);
+                this._.vertex(15, 18);
+                this._.vertex(12, 22);
+                this._.vertex(5, 18);
+                this._.vertex(0, 18);
             }
         } else if (this.w == 50) {
             if (this.seed == 1) {
@@ -83,6 +86,15 @@ class Asteroid {
                 this._.vertex(30, 35);
                 this._.vertex(16, 40);
                 this._.vertex(5, 25);
+            } else if (this.seed == 3) {
+                this._.vertex(3, 2);
+                this._.vertex(15, 5);
+                this._.vertex(42, 7);
+                this._.vertex(44, 23);
+                this._.vertex(42, 48);
+                this._.vertex(25, 36);
+                this._.vertex(12, 30);
+                this._.vertex(5, 15);
             }
         } else if (this.w == 100) {
             if (this.seed == 1) {
@@ -105,6 +117,15 @@ class Asteroid {
                 this._.vertex(14, 60);
                 this._.vertex(16, 40);
                 this._.vertex(22, 5);
+            } else if (this.seed == 3) {
+                this._.vertex(40, 9);
+                this._.vertex(70, 30);
+                this._.vertex(82, 45);
+                this._.vertex(50, 75);
+                this._.vertex(43, 80);
+                this._.vertex(10, 55);
+                this._.vertex(18, 35);
+                this._.vertex(15, 8);
             }
         }
         this._.endShape(this._.CLOSE);

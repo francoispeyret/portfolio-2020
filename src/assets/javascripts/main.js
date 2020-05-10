@@ -18,7 +18,6 @@ let s = (_) => {
     //        GAME OVERLAY        //
     //----------------------------//
     let debug = false,
-        sound = false,
         cursor = null,
         ui = null,
         ballsController      = null,
@@ -31,28 +30,17 @@ let s = (_) => {
         levelsController     = null,
         gameStarted = false,
         gameResume = false,
-        startingAnimation = 90,
         lifeMax = 3;
 
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
         document.querySelector('#home').classList.add('started');
-        if(sound)
-        soundController.soundInit();
+        if(soundController.sound)
+            soundController.soundInit();
         else
-        soundController.soundMute();
+            soundController.soundMute();
     });
 
-    document.querySelector('.sound').addEventListener('click', () => {
-        if(sound) {
-            soundController.soundMute();
-            document.querySelector('.sound').classList.remove('active');
-        } else {
-            soundController.soundInit();
-            document.querySelector('.sound').classList.add('active');
-        }
-        sound = !sound;
-    });
 
     _.preload = () => {
         soundController = new SoundController(_);
@@ -76,18 +64,13 @@ let s = (_) => {
     };
 
     _.draw = () => {
-        _.clear();
-
-        // BREAKPOINT for Mobile Devices
-        if (_.width < 769)
+        // game not init or BREAKPOINT for Mobile Devices
+        if (!gameStarted || _.width < 769) {
             return;
+        }
 
         _.clear();
         _.textFont('Proxima');
-
-        if (!gameStarted) {
-            return;
-        }
 
         // INTERFACE
         if(cursor.life > 0) {
@@ -107,19 +90,6 @@ let s = (_) => {
 
         }
         _.push();
-        if(cursor.life > 0) {
-            // animation scaling
-
-            if (startingAnimation > 1) {
-                startingAnimation--;
-                const  scalingAnimation = _.map(startingAnimation, 90, 1, 0, 1),
-                    translateAnimationX = _.map(startingAnimation, 90, 1, _.width / 2, 0),
-                    translateAnimationY = _.map(startingAnimation, 90, 1, _.height / 2, 0);
-
-                _.translate(translateAnimationX, translateAnimationY);
-                _.scale(scalingAnimation, scalingAnimation);
-            }
-        }
 
         // BALLS
         ballsController.show();
@@ -191,7 +161,7 @@ let s = (_) => {
 
         // ASTEROIDS
         asteroidsController.show();
-        asteroidsController.update(cursor);
+        asteroidsController.update(cursor, levelsController, bulletsController);
 
         // BULLETS
         bulletsController.show();
@@ -224,7 +194,7 @@ let s = (_) => {
         if (cursor.dammageAnimationCount > 1) {
             return;
         }
-        if (levelsController.animationInProgress() || startingAnimation > 1) {
+        if (levelsController.animationInProgress()) {
             return;
         }
         e.preventDefault();
@@ -256,13 +226,6 @@ let s = (_) => {
     window.addEventListener('resize',
         _.resizeCanvas(_.windowWidth - 20, _.windowHeight)
     );
-
-    function levelUpStage() {
-        //level++;
-        //levelAnimation = 90;
-        //levelAsteroidsMaximum = _.map(level, 1, 3, 8, 25);
-        //bulletsController = new BulletsController(_);
-    }
 
 };
 const P5 = new p5(s);
