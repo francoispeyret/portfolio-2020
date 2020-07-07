@@ -1,7 +1,5 @@
 import Typewriter from "typewriter-effect/dist/core";
 
-/**/
-
 let launched = false;
 window.addEventListener('scroll', windowFooterScroll);
 
@@ -9,7 +7,7 @@ function windowFooterScroll() {
     const windowScrollTop = document.getElementsByTagName('html')[0].scrollTop;
     const windowHeight = document.getElementsByTagName('html')[0].offsetHeight;
 
-    if(windowScrollTop + window.innerHeight - windowHeight > - 50 && launched == false) {
+    if(windowScrollTop + window.innerHeight - windowHeight > - 50 && launched === false) {
         launched = true;
         new Typewriter('.bravo', {
             strings: `Bravo! <br>

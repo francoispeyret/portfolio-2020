@@ -1,10 +1,8 @@
-
 import { gsap } from "gsap";
 
 //-----------------------//
 //        HEADER        //
 //----------------------//
-
 
 gsap.from("#header", {
     opacity:0,
@@ -19,7 +17,6 @@ gsap.from(".mouse-invit", {
     duration: .6,
     delay: 1
 });
-
 
 let headerArrow = {
     el: document.querySelector('header .arrow'),

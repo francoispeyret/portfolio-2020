@@ -1,6 +1,5 @@
 import { createPopper } from '@popperjs/core';
 
-
 const buttons = document.querySelectorAll('.tooltip-button');
 
 let popperInstance = [];
@@ -18,7 +17,6 @@ function create(button,tooltip) {
         ],
     });
 }
-
 
 function destroy(tooltip) {
     if (popperInstance[tooltip.id]) {

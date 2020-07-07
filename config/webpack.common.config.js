@@ -82,6 +82,7 @@ module.exports = {
             title: 'François Peyret - Web Front Developer',
             template: './src/index.html',
             inject: true,
+            scriptLoading: 'defer',
             minify: {
                 removeComments: true,
                 collapseWhitespace: true
@@ -90,7 +91,7 @@ module.exports = {
         new HTMLInlineCSSWebpackPlugin({
             replace: {
                 removeTarget: true,
-                target: '<!-- inline_css_plugin -->',
+                target: '{{inline_css_plugin}}',
             },
         }),
         new CopyWebpackPlugin([{

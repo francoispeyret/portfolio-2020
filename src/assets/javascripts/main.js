@@ -2,6 +2,7 @@ import * as p5 from "p5";
 import * as p5moduleSound from  "p5/lib/addons/p5.sound";
 
 import Cursor from "./classes/cursor";
+import Gravity from "./classes/gravity";
 import Ui from "./classes/ui";
 
 import AsteroidsController from './controllers/asteroids';
@@ -17,9 +18,11 @@ let s = (_) => {
     //----------------------------//
     //        GAME OVERLAY        //
     //----------------------------//
-    let debug = false,
-        cursor = null,
-        ui = null,
+    let debug   = false,
+        cursor  = null,
+        gravity = null,
+        ui      = null,
+
         ballsController      = null,
         bulletsController    = null,
         asteroidsController  = null,
@@ -28,9 +31,10 @@ let s = (_) => {
         soundController      = null,
         scoresController     = null,
         levelsController     = null,
+
         gameStarted = false,
-        gameResume = false,
-        lifeMax = 3;
+        gameResume  = false,
+        lifeMax     = 3;
 
     document.querySelector('#play-start').addEventListener('click', () => {
         gameStarted = true;
@@ -52,6 +56,7 @@ let s = (_) => {
         _.frameRate(60);
 
         cursor = new Cursor(_),
+        gravity = new Gravity(_),
         ui = new Ui(_),
         ballsController = new BallsController(_),
         bulletsController = new BulletsController(_, soundController),
@@ -76,7 +81,6 @@ let s = (_) => {
         if(cursor.life > 0) {
 
             // SCORING $$$
-
             ui.show(cursor, levelsController, scoresController);
 
             // \\ INTERFACE
@@ -86,8 +90,6 @@ let s = (_) => {
             if (levelsController.animationInProgress()) {
                 return;
             }
-
-
         }
         _.push();
 
@@ -108,12 +110,12 @@ let s = (_) => {
                         cursor.life--;
                         cursor.dammageAnimationCount = 90;
                         soundController.cursorDamageSound.play();
-                        
+
                         explosionsController.createExplosion(
                             asteroidsController.asteroids[a].pos,
                             asteroidsController.asteroids[a].w
                             );
-                        
+
                         asteroidsController.asteroidSubdivide(asteroidsController.asteroids[a],lootsController);
                         asteroidsController.asteroids.splice(a, 1);
                         break;
@@ -136,7 +138,7 @@ let s = (_) => {
             }
         } else {
             if (_.frameCount % 20 === 0 && asteroidsController.asteroids.length) {
-                
+
                 explosionsController.createExplosion(
                     asteroidsController.asteroids[0].pos,
                     asteroidsController.asteroids[0].w
@@ -153,6 +155,9 @@ let s = (_) => {
                 lootsController.loots.splice(0, 1);
             }
         }
+
+        gravity.show(_);
+        gravity.update(asteroidsController.asteroids);
 
 
         // LOOTS
@@ -226,6 +231,6 @@ let s = (_) => {
     window.addEventListener('resize',
         _.resizeCanvas(_.windowWidth - 20, _.windowHeight)
     );
-
 };
+
 const P5 = new p5(s);
