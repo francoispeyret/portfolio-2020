@@ -157,7 +157,7 @@ let s = (_) => {
         }
 
         gravity.show(_);
-        gravity.update(asteroidsController.asteroids);
+        gravity.update(asteroidsController.asteroids, cursor);
 
 
         // LOOTS
@@ -228,9 +228,10 @@ let s = (_) => {
         }
     }
 
-    window.addEventListener('resize',
-        _.resizeCanvas(_.windowWidth - 20, _.windowHeight)
-    );
+    window.addEventListener('resize',() => {
+        _.resizeCanvas(_.windowWidth - 20, _.windowHeight);
+        gravity.resize(_);
+    });
 };
 
 const P5 = new p5(s);

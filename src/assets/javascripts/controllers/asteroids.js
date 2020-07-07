@@ -10,7 +10,6 @@ class AsteroidsController {
     }
 
     show() {
-        
         for (let a = 0; a < this.asteroids.length; a++) {
             this.asteroids[a].show();
         }
@@ -39,16 +38,52 @@ class AsteroidsController {
     }
 
     asteroidCreate(size, origin) {
+        if(typeof size === 'undefined')
+            return console.error('asteroidCreate has size undefined');
+
         let position;
         if (typeof origin !== 'undefined') {
             position = this._.createVector(origin.x, origin.y);
         } else {
-            position = this._.createVector(this._.random(0, this._.width), this._.random(0, this._.height));
+            const borderSpawn = Math.floor(this._.random(0,4));
+            const offsetDiv   = 3; // high is less
+
+            position    = this._.createVector(0,0);
+            switch (borderSpawn) {
+                case 0:
+                    position.set(
+                        this._.random(this._.width, this._.width + this._.width/offsetDiv),
+                        this._.random(0, this._.height)
+                    );
+                    break;
+                case 1:
+                    position.set(
+                        this._.random(-this._.width/offsetDiv, 0),
+                        this._.random(0, this._.height)
+                    );
+                    break;
+                case 2:
+                    position.set(
+                        this._.random(0, this._.width),
+                        this._.random(-this._.height/offsetDiv, 0)
+                    );
+                    break;
+                case 3:
+                    position.set(
+                        this._.random(0, this._.width),
+                        this._.random(this._.height, this._.height + this._.height/offsetDiv)
+                    );
+                    break;
+            }
         }
-        this.asteroids.push(new Asteroid(this._, size, position));
+        this.asteroids.push(
+            new Asteroid(this._, size, position)
+        );
     }
 
     asteroidRemove(index) {
+        if(typeof index === 'undefined')
+            return console.error('asteroidRemove has index undefined');
         this.asteroids.splice(index, 1);
     }
 
@@ -76,12 +111,16 @@ class AsteroidsController {
         for (let a = 0; a < asteroidsLength; a++) {
             let randShape, rand = Math.floor(this._.random(1, 4));
 
-            if (rand === 1) {
-                randShape = 30;
-            } else if (rand === 2) {
-                randShape = 50;
-            } else if (rand === 3) {
-                randShape = 100;
+            switch (rand) {
+                case 1:
+                    randShape = 30;
+                    break;
+                case 2:
+                    randShape = 50;
+                    break;
+                case 3:
+                    randShape = 100;
+                    break;
             }
             this.asteroidCreate(randShape);
         }
