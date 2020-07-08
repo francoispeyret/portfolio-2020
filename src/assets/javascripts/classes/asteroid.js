@@ -13,12 +13,22 @@ class Asteroid {
         this.angleVel = this._.random(-this._.QUARTER_PI / 30, this._.QUARTER_PI / 30);
     }
 
+    applyForce(force) {
+        let f = this._.createVector(
+            this._.constrain(force.x / (this.w*2), -1, 1),
+            this._.constrain(force.y / (this.w*2), -1, 1)
+        );
+        this.vel.add(f);
+
+    }
+
     update() {
         this.angle += this.angleVel;
 
         if (this.spawnAnimation > 1)
             this.spawnAnimation--;
-        this.pos.add(this.vel);
+
+        this.pos.add(this.vel.limit(7));
 
         objectNoLimit(this);
     }

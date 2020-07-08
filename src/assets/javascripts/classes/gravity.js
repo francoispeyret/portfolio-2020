@@ -1,7 +1,7 @@
 class Gravity {
     constructor(_) {
         this._ = _;
-        this.G = 50;
+        this.G = .1;
         this.initSpaceTime();
     }
 
@@ -42,7 +42,8 @@ class Gravity {
                 for(let x = 0; x < this.spaceTime[y].length; x++) {
                     const spaceTimeItem = this.spaceTime[y][x];
                     const distance      = this._.dist(spaceTimeItem.pos.x, spaceTimeItem.pos.y, asteroids[a].pos.x, asteroids[a].pos.y)
-                    spaceTimeItem.g += this.G * (asteroids[a].w / 1.5) / this._.constrain(distance, 30, 999);
+                    spaceTimeItem.g += 25 * (asteroids[a].w / 1.5) / this._.constrain(distance, 30, 999);
+                    this.attract(asteroids[a], cursor);
                 }
             }
         }
@@ -54,6 +55,17 @@ class Gravity {
             }
         }
 
+    }
+
+    attract(mover, cursor) {
+        let force = this._.createVector(
+            cursor.pos.x - mover.pos.x,
+            cursor.pos.y - mover.pos.y
+        );
+        let distanceSq = this._.constrain(force.magSq(), 100, 1000);
+        let strengh = this.G * (cursor.w * mover.w) / distanceSq;
+        force.setMag(strengh);
+        mover.applyForce(force);
     }
 
     resize(_) {

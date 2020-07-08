@@ -94,8 +94,10 @@ let s = (_) => {
         _.push();
 
         // BALLS
-        ballsController.show();
-        ballsController.update();
+        if ( _.width < 769) {
+            ballsController.show();
+            ballsController.update();
+        }
 
         _.noFill();
 

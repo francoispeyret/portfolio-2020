@@ -4,7 +4,7 @@ class Cursor {
         this.pos  = this._.createVector(this._.width / 2, this._.height / 2);
         this.w    = 15;
         this.wMax = 15;
-        this.life = 3
+        this.life = 3;
         this.dammageAnimationCount = 0;
 
         this.smoke = [];
@@ -46,7 +46,7 @@ class Cursor {
             this._.vertex(0, 10);
             this._.vertex(0, -10);
             this._.endShape(this._.CLOSE);
-            
+
             /*this._.beginShape();
             this._.vertex(-5, 5);
             this._.vertex(-5, -5);
