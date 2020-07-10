@@ -2,11 +2,11 @@
 import objectNoLimit from "../common/utils";
 
 class Asteroid {
-    constructor(_, size, position) {
+    constructor(_, size, position, velocity) {
         this._ = _;
         this.pos = position;
         this.seed = Math.floor(this._.random(1, 4));
-        this.vel = this._.createVector(this._.random(1.8, -1.8), this._.random(1.8, -1.8));
+        this.vel = velocity || this._.createVector(this._.random(1.8, -1.8), this._.random(1.8, -1.8));
         this.w = size;
         this.spawnAnimation = 20;
         this.angle = this._.random(0, this._.TWO_PI);

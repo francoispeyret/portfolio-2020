@@ -37,7 +37,7 @@ class AsteroidsController {
         }
     }
 
-    asteroidCreate(size, origin) {
+    asteroidCreate(size, origin, velocity) {
         if(typeof size === 'undefined')
             return console.error('asteroidCreate has size undefined');
 
@@ -77,7 +77,7 @@ class AsteroidsController {
             }
         }
         this.asteroids.push(
-            new Asteroid(this._, size, position)
+            new Asteroid(this._, size, position, velocity)
         );
     }
 
@@ -102,8 +102,8 @@ class AsteroidsController {
 
         lootsController.lootCreate(asteroidBefore.pos);
 
-        this.asteroidCreate(randShape, asteroidBefore.pos),
-        this.asteroidCreate(randShape, asteroidBefore.pos);
+        this.asteroidCreate(randShape, asteroidBefore.pos, asteroidBefore.vel),
+        this.asteroidCreate(randShape, asteroidBefore.pos, asteroidBefore.vel);
     }
 
     asteroidsSpawn(levelController) {
