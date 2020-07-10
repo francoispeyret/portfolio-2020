@@ -34,27 +34,17 @@ class Gravity {
     update(asteroids, cursor) {
         for(let y = 0; y < this.spaceTime.length; y++) {
             for(let x = 0; x < this.spaceTime[y].length; x++) {
-                this.spaceTime[y][x].g = 0;
-            }
-        }
-        for(let a = 0; a < asteroids.length; a++) {
-            for(let y = 0; y < this.spaceTime.length; y++) {
-                for(let x = 0; x < this.spaceTime[y].length; x++) {
-                    const spaceTimeItem = this.spaceTime[y][x];
+                let spaceTimeItem   = this.spaceTime[y][x];
+                    spaceTimeItem.g = 0;
+                for(let a = 0; a < asteroids.length; a++) {
                     const distance      = this._.dist(spaceTimeItem.pos.x, spaceTimeItem.pos.y, asteroids[a].pos.x, asteroids[a].pos.y)
                     spaceTimeItem.g += 25 * (asteroids[a].w / 1.5) / this._.constrain(distance, 30, 999);
                     this.attract(asteroids[a], cursor);
                 }
-            }
-        }
-        for(let y = 0; y < this.spaceTime.length; y++) {
-            for(let x = 0; x < this.spaceTime[y].length; x++) {
-                const spaceTimeItem = this.spaceTime[y][x];
                 const distance      = this._.dist(spaceTimeItem.pos.x, spaceTimeItem.pos.y, cursor.pos.x, cursor.pos.y)
-                spaceTimeItem.g += this.G * (140 / 1.5) / this._.constrain(distance, 30, 999);
+                spaceTimeItem.g += 25 * (140 / 1.5) / this._.constrain(distance, 30, 999);
             }
         }
-
     }
 
     attract(mover, cursor) {
