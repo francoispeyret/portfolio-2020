@@ -88,12 +88,6 @@ module.exports = {
                 collapseWhitespace: true
             }
         }),
-        new HTMLInlineCSSWebpackPlugin({
-            replace: {
-                removeTarget: true,
-                target: '{{inline_css_plugin}}',
-            },
-        }),
         new CopyWebpackPlugin([{
             from: './src/assets/images',
             to: 'assets/images'

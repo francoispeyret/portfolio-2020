@@ -1,7 +1,7 @@
 class Gravity {
     constructor(_) {
         this._ = _;
-        this.G = .1;
+        this.G = .05;
         this.initSpaceTime();
     }
 

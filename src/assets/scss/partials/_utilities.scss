@@ -59,6 +59,25 @@ body {
 a {
     color: white;
     text-decoration: none;
+    position: relative;
+
+    &:not(.no-hover) {
+        &::before {
+            content:"";
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10%;
+            height: 0;
+            background-color: #fff7;
+            transition: height ease 0.3s;
+        }
+    
+        &:hover::before {
+            height: 20%;
+        }
+    }
 }
 
 .tooltip {
